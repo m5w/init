@@ -38,7 +38,9 @@ exit 1
 #cd "~$SUDO_USER"
 #mkdir -p github.com/m5w
 #cd github.com/m5w
-cd "~$SUDO_USER/github.com/m5w"  # github.com/m5w/init/ should already exist.
+# <https://superuser.com/a/484330>
+SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
+cd "$SUDO_HOME/github.com/m5w"  # github.com/m5w/init/ should already exist.
 git clone https://github.com/m5w/logger
 cd logger
 install -Dt /opt/logger/bin logger.sh
