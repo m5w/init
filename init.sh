@@ -62,7 +62,7 @@ logger.sh apt-get -qy dist-upgrade  # The user should have had to have run
                                     #
                                     # to install git, which should be
                                     # installed.
-logger.sh apt-get --qy --purge autoremove
+logger.sh apt-get -qy --purge autoremove
 
 # Install stow.
 
