@@ -29,7 +29,9 @@ exit 1
 # stow, and we log all installations. Therefore, we first must clone and
 # install logger.
 
-# Actually, those aliases aren't useful in this script---the ones that pertain to some of what we need to do (update and install packages) automatically invoke sudo. Nonetheless, we still need stow to configure GNU GRUB.
+# Actually, those aliases aren't useful in this script---the ones that pertain
+# to some of what we need to do (update and install packages) automatically
+# invoke sudo. Nonetheless, we still need stow to configure GNU GRUB.
 
 #cd "~$SUDO_USER"
 #mkdir -p github.com/m5w
