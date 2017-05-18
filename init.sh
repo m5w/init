@@ -69,3 +69,14 @@ logger.sh apt-get -qy --purge autoremove
 # Install stow.
 
 logger.sh apt-get -qy install stow
+
+# Configure GNU GRUB.
+
+cd /etc/default
+git clone https://github.com/m5w/etc-default-stow.git stow
+#rm grub
+logger.sh apt-get -qy install trash-cli
+trash-put grub  # We should preserve system files, just in case.
+cd stow
+stow grub
+logger.sh update-grub
