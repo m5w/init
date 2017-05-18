@@ -98,7 +98,7 @@ logger.sh apt-get -qy update
 
 logger.sh apt-get -qy build-dep vim
 su "$SUDO_USER" <<\LF
-cd ~/github.com/m5w"
+cd ~/github.com/m5w
 git clone https://github.com/m5w/vim.git
 cd vim
 git checkout nuw
