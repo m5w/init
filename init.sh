@@ -23,3 +23,31 @@ unalias -a
 echo "$0: You must use sudo to execute this program as the superuser"
 exit 1
 }
+
+# Really, we'd like to clone my dotfiles, stow .bash_aliases, and source it so
+# that we could use my aliases henceforth. However, we first need to install
+# stow, and we log all installations. Therefore, we first must clone and
+# install logger.
+
+# Actually, those aliases aren't useful in this script---the ones that pertain to some of what we need to do (update and install packages) automatically invoke sudo. Nonetheless, we still need stow to configure GNU GRUB.
+
+#cd "~$SUDO_USER"
+#mkdir -p github.com/m5w
+#cd github.com/m5w
+cd "~$SUDO_USER/github.com/m5w"  # github.com/m5w/init/ should already exist.
+git clone https://github.com/m5w/logger
+cd logger
+install -dt /opt/logger/bin logger.sh
+
+# Add /opt/logger/bin to the PATH so that we can use logger. /etc/profile will
+# do this once we stow it, but we need logger before we can stow anything, and
+# /etc/profile checks if directories exist before adding them to the PATH
+# anyway, so we would have to source it after each installation to /opt/, which
+# would lead to duplicate directories in the PATH. Therefore, we add
+# directories manually to the PATH each time in this script.
+
+PATH="/opt/logger/bin:$PATH"
+
+# Install stow.
+
+logger.sh apt-get -qy install stow
