@@ -58,11 +58,11 @@ PATH="/opt/logger/bin:$PATH"
 # reasons similar to why my aliases are not useful.
 
 #logger.sh apt-get -qy update
-logger.sh apt-get -qy dist-upgrade  # The user should have had to have run
+#logger.sh apt-get -qy dist-upgrade  # The user should have had to have run
                                     #
                                     #         sudo apt-get -q update
                                     #
-                                    # to install git, which should be
+                                    # before installing git, which should be
                                     # installed.
 logger.sh apt-get -qy --purge autoremove
 
@@ -78,5 +78,6 @@ git clone https://github.com/m5w/etc-default-stow.git stow
 logger.sh apt-get -qy install trash-cli
 trash-put grub  # We should preserve system files, just in case.
 cd stow
+git checkout VirtualBox
 stow grub
-logger.sh update-grub
+update-grub
