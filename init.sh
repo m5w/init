@@ -39,11 +39,11 @@ exit 1
 #mkdir -p github.com/m5w
 #cd github.com/m5w
 # <https://superuser.com/a/484330>
-SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
 su "$SUDO_USER" <<\LF
-cd "$SUDO_HOME/github.com/m5w"  # github.com/m5w/init/ should already exist.
+cd ~/github.com/m5w  # github.com/m5w/init/ should already exist.
 git clone https://github.com/m5w/logger
 LF
+SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
 cd "$SUDO_HOME/github.com/m5w/logger"
 install -Dt /opt/logger/bin logger.sh
 
@@ -98,7 +98,7 @@ logger.sh apt-get -qy update
 
 logger.sh apt-get -qy build-dep vim-gtk
 su "$SUDO_USER" <<\LF
-cd "$SUDO_HOME/github.com/m5w"
+cd ~/github.com/m5w"
 git clone https://github.com/m5w/vim.git
 cd vim
 git checkout nuw
