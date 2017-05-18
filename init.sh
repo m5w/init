@@ -85,7 +85,7 @@ stow grub
 update-grub
 
 # Configure APT. We need source code to run
-#         logger.sh apt-get -qy build-dep vim-gtk
+#         logger.sh apt-get -qy build-dep vim
 
 cd /etc/apt
 git clone https://github.com/m5w/etc-apt-stow.git stow
@@ -96,7 +96,7 @@ logger.sh apt-get -qy update
 
 # Install vim.
 
-logger.sh apt-get -qy build-dep vim-gtk
+logger.sh apt-get -qy build-dep vim
 su "$SUDO_USER" <<\LF
 cd ~/github.com/m5w"
 git clone https://github.com/m5w/vim.git
