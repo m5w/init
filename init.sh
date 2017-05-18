@@ -31,7 +31,9 @@ exit 1
 
 # Actually, those aliases aren't useful in this script---the ones that pertain
 # to some of what we need to do (update and install packages) automatically
-# invoke sudo. Nonetheless, we still need stow to configure GNU GRUB.
+# invoke sudo and require user confirmation. Nonetheless, we still need stow to
+# configure GNU GRUB, and we still need logger foremost to update all of the
+# installed software.
 
 #cd "~$SUDO_USER"
 #mkdir -p github.com/m5w
@@ -39,7 +41,7 @@ exit 1
 cd "~$SUDO_USER/github.com/m5w"  # github.com/m5w/init/ should already exist.
 git clone https://github.com/m5w/logger
 cd logger
-install -dt /opt/logger/bin logger.sh
+install -Dt /opt/logger/bin logger.sh
 
 # Add /opt/logger/bin to the PATH so that we can use logger. /etc/profile will
 # do this once we stow it, but we need logger before we can stow anything, and
@@ -49,6 +51,18 @@ install -dt /opt/logger/bin logger.sh
 # directories manually to the PATH each time in this script.
 
 PATH="/opt/logger/bin:$PATH"
+
+# Update all of the installed software. We cannot use software-updater for
+# reasons similar to why my aliases are not useful.
+
+#logger.sh apt-get -qy update
+logger.sh apt-get -qy dist-upgrade  # The user should have had to have run
+                                    #
+                                    #         sudo apt-get -q update
+                                    #
+                                    # to install git, which should be
+                                    # installed.
+logger.sh apt-get --qy --purge autoremove
 
 # Install stow.
 
