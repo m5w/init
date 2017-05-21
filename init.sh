@@ -161,17 +161,17 @@ terminal-logger apt-get -y install clang-format
 terminal-logger apt-get -y install curl
 
 # YCM-Generator
-terminal-logger apt-get -y install                                           \
-        clang                                                                \
+terminal-logger apt-get -y install                                            \
+        clang                                                                 \
         python
 
 # color_coded
-terminal-logger apt-get -y install                                           \
-        cmake                                                                \
-        libclang-dev                                                         \
-        libncurses-dev                                                       \
-        libpthread-workqueue-dev                                             \
-        libz-dev                                                             \
+terminal-logger apt-get -y install                                            \
+        cmake                                                                 \
+        libclang-dev                                                          \
+        libncurses-dev                                                        \
+        libpthread-workqueue-dev                                              \
+        libz-dev                                                              \
         xz-utils
 #
 #         terminal-logger apt-get -y install "liblua$(
@@ -188,8 +188,8 @@ LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
 terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
-terminal-logger apt-get -y install                                           \
-        python-dev                                                           \
+terminal-logger apt-get -y install                                            \
+        python-dev                                                            \
         python3-dev
 
 su "$SUDO_USER" << LF
@@ -198,3 +198,9 @@ cd ~/stow
 stow vim
 vim +qa
 LF
+
+su "$SUDO_USER" << LF
+cd ~/stow
+stow                                                                          \
+        bash                                                                  \
+        git
