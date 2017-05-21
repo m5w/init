@@ -16,78 +16,98 @@
 set -eo pipefail
 unalias -a
 
-# We want to configure the user's home directory, not root's. However, we
-# require root permissions. Therefore, the user must run this script with sudo.
+# This script needs root permissions to install programs and packages. However,
+# it also needs to run as the user and under the user's home directory.
+# Therefore, the user must run this script with sudo so that this script can
+# run as the user with
+#
+#         su "$SUDO_USER" << LF
+#
+# and use
+#
+#         "$(getent passwd "$SUDO_USER"|cut -d: -f6)"
+#
+# to get the user's home directory.
 
 [[ "$EUID" -eq 0 ]] && [[ -n "$SUDO_USER" ]] || {
 echo "$0: You must use sudo to execute this program as the superuser"
 exit 1
 }
 
-# Really, we'd like to clone my dotfiles, stow .bash_aliases, and source it so
-# that we could use my aliases henceforth. However, we first need to install
-# stow, and we log all installations. Therefore, we first must clone and
-# install terminal-logger.
+# Install terminal-logger. This script needs it to upgrade all of the installed
+# software by running
+#
+#         terminal-logger apt-get -qy dist-upgrade
+#         terminal-logger apt-get -qy --purge autoremove
+#
+# and install stow, which this script needs first to configure GNU GRUB.
 
-# Actually, those aliases aren't useful in this script---the ones that pertain
-# to some of what we need to do (update and install packages) automatically
-# invoke sudo and require user confirmation. Nonetheless, we still need stow to
-# configure GNU GRUB, and we still need terminal-logger foremost to update all
-# of the installed software.
+su "$SUDO_USER" << LF
 
-su "$SUDO_USER" <<\LF
-#cd "~$SUDO_USER"  # This was not originally in a heredoc. (It should have been
-                   # in one, though, since we want to clone repositories as
-                   # the user.)
-#mkdir -p github.com/m5w
-#cd github.com/m5w
-cd ~/github.com/m5w  # github.com/m5w/init/ should already exist.
-git clone https://github.com/m5w/terminal-logger.git
+#
+#         cd ~
+#         mkdir -p github.com/m5w
+#         cd github.com/m5w
+# 
+# github.com/m5w/init/ should already exist.
+cd ~/github.com/m5w
+
+git clone https://github.com/m5w/terminal-logger.git terminal-logger
 LF
-# <https://superuser.com/a/484330>
-SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
+
+# cf. <https://superuser.com/a/484330>.
+SUDO_HOME="$(getent passwd "$SUDO_USER"|cut -d: -f6)"
+
 cd "$SUDO_HOME/github.com/m5w/terminal-logger"
 install -Dt /usr/local/bin terminal-logger
 
-# Update all of the installed software. We should not use my upgrade script
-# because it performs an unnecessary update (cf. below).
+# Upgrade all of the installed software.
 
-#terminal-logger apt-get -y update
-#terminal-logger apt-get -y dist-upgrade  # The user should have had to have
-                                          # run
-                                          #
-                                          #         sudo apt-get -q update
-                                          #
-                                          # before installing git, which should
-                                          # be installed.
-terminal-logger apt-get -y --purge autoremove
+#
+#         terminal-logger apt-get -qy update
+#
+# The user should have had to have run
+#
+#         sudo apt-get update
+#
+# before installing git, which should be installed. Because the upgrade script
+# performs this redundant and thus unnecessary update, this script does not use
+# the upgrade script.
+
+#terminal-logger apt-get -qy dist-upgrade
+terminal-logger apt-get -qy --purge autoremove
 
 # Install stow.
 
-terminal-logger apt-get -y install stow
-
-# Install my backup and upgrade scripts.
-
-su "$SUDO_USER" <<\LF
-cd ~
-git clone https://github.com/m5w/stow.git
-LF
-cd "$SUDO_HOME/stow/backup"
-install -Dt /usr/local/bin backup
-cd "$SUDO_HOME/stow/upgrade"
-install -Dt /usr/local/bin upgrade
+terminal-logger apt-get -qy install stow
 
 # Configure GNU GRUB.
 
 cd /etc/default
 git clone https://github.com/m5w/etc-default-stow.git stow
-#rm grub
-terminal-logger apt-get -y install trash-cli
-trash-put grub  # We should preserve system files, just in case.
+
+#
+#         rm grub
+#
+# System file should be preserved, just in case.
+terminal-logger apt-get -qy install trash-cli
+trash-put grub
+
 cd stow
 git checkout VirtualBox
 stow grub
 update-grub
+
+# Install the backup and upgrade scripts.
+
+su "$SUDO_USER" << LF
+cd ~
+git clone https://github.com/m5w/stow.git stow
+LF
+cd "$SUDO_HOME/stow/backup"
+install -Dt /usr/local/bin backup
+cd "$SUDO_HOME/stow/upgrade"
+install -Dt /usr/local/bin upgrade
 
 # Configure APT. We need source code to run
 #
@@ -99,14 +119,17 @@ git clone https://github.com/m5w/etc-apt-stow.git stow
 trash-put sources.list
 cd stow
 stow apt
+
+# "-qy" is no longer necessary; only "-y" is.
+
 terminal-logger apt-get -y update
 
 # Install vim.
 
 terminal-logger apt-get -y build-dep vim
-su "$SUDO_USER" <<\LF
+su "$SUDO_USER" << LF
 cd ~/github.com/m5w
-git clone https://github.com/m5w/vim.git
+git clone https://github.com/m5w/vim.git vim
 cd vim
 ./configure                                                                   \
         --with-features=huge                                                  \
@@ -125,7 +148,16 @@ make install
 
 # Configure vim.
 
-# plug
+# ClangFormat
+su "$SUDO_USER" << LF
+cd ~/stow
+stow clang-format
+LF
+terminal-logger apt-get -y install clang-format
+
+# to-do: eclim
+
+# vim-plug
 terminal-logger apt-get -y install curl
 
 # YCM-Generator
@@ -141,10 +173,15 @@ terminal-logger apt-get -y install                                           \
         libpthread-workqueue-dev                                             \
         libz-dev                                                             \
         xz-utils
-#terminal-logger apt-get -y install "liblua$(
-#vim --version|
-#grep -- '-llua[1-9]\.[0-9]'|
-#sed 's/.*-llua\([1-9]\.[0-9]\).*/\1/')-dev"
+#
+#         terminal-logger apt-get -y install "liblua$(
+#         vim --version|
+#         grep -- '-llua[1-9]\.[0-9]'|
+#         sed 's/.*-llua\([1-9]\.[0-9]\).*/\1/')-dev"
+#
+# Use GNU Bash's built-in regular-expression matching instead of using grep to
+# search for a pattern and then using sed to search for the same pattern to
+# perform a substitution.
 VIM_VERSION="$(vim --version)"
 LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
 [[ $VIM_VERSION =~ $LIBLUA_VERSION_PATTERN ]]
@@ -154,3 +191,10 @@ terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 terminal-logger apt-get -y install                                           \
         python-dev                                                           \
         python3-dev
+
+su "$SUDO_USER" << LF
+mkdir -p ~/.vim/after/ftplugin
+cd ~/stow
+stow vim
+vim +qa
+LF
