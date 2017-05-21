@@ -173,15 +173,6 @@ terminal-logger apt-get -y install                                            \
         libpthread-workqueue-dev                                              \
         libz-dev                                                              \
         xz-utils
-#
-#         terminal-logger apt-get -y install "liblua$(
-#         vim --version|
-#         grep -- '-llua[1-9]\.[0-9]'|
-#         sed 's/.*-llua\([1-9]\.[0-9]\).*/\1/')-dev"
-#
-# Use GNU Bash's built-in regular-expression matching instead of using grep to
-# search for a pattern and then using sed to search for the same pattern to
-# perform a substitution.
 VIM_VERSION="$(vim --version)"
 LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
 [[ $VIM_VERSION =~ $LIBLUA_VERSION_PATTERN ]]
