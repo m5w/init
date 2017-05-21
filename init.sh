@@ -207,3 +207,4 @@ cd stow
 stow                                                                          \
         bash                                                                  \
         git
+LF
