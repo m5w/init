@@ -36,11 +36,13 @@ exit 1
 # of the installed software.
 
 su "$SUDO_USER" <<\LF
-#cd "~$SUDO_USER"
+#cd "~$SUDO_USER"  # This was not originally in a heredoc. (It should have been
+                   # in one, though, since we want to clone repositories as
+                   # the user.)
 #mkdir -p github.com/m5w
 #cd github.com/m5w
 cd ~/github.com/m5w  # github.com/m5w/init/ should already exist.
-git clone https://github.com/m5w/terminal-logger
+git clone https://github.com/m5w/terminal-logger.git
 LF
 # <https://superuser.com/a/484330>
 SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
@@ -50,26 +52,37 @@ install -Dt /usr/local/bin terminal-logger
 # Update all of the installed software. We should not use my upgrade script
 # because it performs an unnecessary update (cf. below).
 
-#terminal-logger apt-get -qy update
-#terminal-logger apt-get -qy dist-upgrade  # The user should have had to have
+#terminal-logger apt-get -y update
+#terminal-logger apt-get -y dist-upgrade  # The user should have had to have
                                           # run
                                           #
                                           #         sudo apt-get -q update
                                           #
                                           # before installing git, which should
                                           # be installed.
-terminal-logger apt-get -qy --purge autoremove
+terminal-logger apt-get -y --purge autoremove
 
 # Install stow.
 
-terminal-logger apt-get -qy install stow
+terminal-logger apt-get -y install stow
+
+# Install my backup and upgrade scripts.
+
+su "$SUDO_USER" <<\LF
+cd ~
+git clone https://github.com/m5w/stow.git
+LF
+cd "$SUDO_HOME/stow/backup"
+install -Dt /usr/local/bin backup
+cd "$SUDO_HOME/stow/upgrade"
+install -Dt /usr/local/bin upgrade
 
 # Configure GNU GRUB.
 
 cd /etc/default
 git clone https://github.com/m5w/etc-default-stow.git stow
 #rm grub
-terminal-logger apt-get -qy install trash-cli
+terminal-logger apt-get -y install trash-cli
 trash-put grub  # We should preserve system files, just in case.
 cd stow
 git checkout VirtualBox
@@ -78,7 +91,7 @@ update-grub
 
 # Configure APT. We need source code to run
 #
-#         terminal-logger apt-get -qy build-dep vim
+#         terminal-logger apt-get -y build-dep vim
 #
 
 cd /etc/apt
@@ -86,11 +99,11 @@ git clone https://github.com/m5w/etc-apt-stow.git stow
 trash-put sources.list
 cd stow
 stow apt
-terminal-logger apt-get -qy update
+terminal-logger apt-get -y update
 
 # Install vim.
 
-terminal-logger apt-get -qy build-dep vim
+terminal-logger apt-get -y build-dep vim
 su "$SUDO_USER" <<\LF
 cd ~/github.com/m5w
 git clone https://github.com/m5w/vim.git
@@ -113,31 +126,31 @@ make install
 # Configure vim.
 
 # plug
-terminal-logger apt-get -qy install curl
+terminal-logger apt-get -y install curl
 
 # YCM-Generator
-terminal-logger apt-get -qy install                                          \
+terminal-logger apt-get -y install                                           \
         clang                                                                \
         python
 
 # color_coded
-terminal-logger apt-get -qy install                                          \
+terminal-logger apt-get -y install                                           \
         cmake                                                                \
         libclang-dev                                                         \
         libncurses-dev                                                       \
         libpthread-workqueue-dev                                             \
         libz-dev                                                             \
         xz-utils
-#terminal-logger apt-get -qy install "liblua$(
+#terminal-logger apt-get -y install "liblua$(
 #vim --version|
 #grep -- '-llua[1-9]\.[0-9]'|
 #sed 's/.*-llua\([1-9]\.[0-9]\).*/\1/')-dev"
 VIM_VERSION="$(vim --version)"
 LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
 [[ $VIM_VERSION =~ $LIBLUA_VERSION_PATTERN ]]
-terminal-logger apt-get -qy install "liblua${BASH_REMATCH[1]}-dev"
+terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
-terminal-logger apt-get -qy install                                          \
+terminal-logger apt-get -y install                                           \
         python-dev                                                           \
         python3-dev
