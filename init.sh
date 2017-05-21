@@ -63,7 +63,7 @@ sudo -iu "$SUDO_USER" bash << LF
 #         cd github.com/m5w
 #
 # github.com/m5w/init/ should already exist.
-cd /github.com/m5w
+cd github.com/m5w
 
 git clone https://github.com/m5w/terminal-logger.git terminal-logger
 LF
