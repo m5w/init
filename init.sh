@@ -16,14 +16,18 @@
 set -eo pipefail
 unalias -a
 
-# This script needs root permissions to install programs and packages. However,
-# it also needs to run as the user and under the user's home directory.
-# Therefore, the user must run this script with sudo so that this script can
-# run as the user with
+# This script needs to run as root. However, it also needs to run:
 #
-#         su "$SUDO_USER" << LF
+#      -  as the user and
 #
-# and use
+#      -  under the user's home directory, but as root.
+#
+# Therefore, the user must use sudo to run this script as root so that this
+# script can use
+#
+#         sudo -iu "$SUDO_USER" bash << LF
+#
+# to run as the user and
 #
 #         "$(getent passwd "$SUDO_USER"|cut -d: -f6)"
 #
@@ -31,6 +35,16 @@ unalias -a
 
 [[ "$EUID" -eq 0 ]] && [[ -n "$SUDO_USER" ]] || {
 echo "$0: You must use sudo to execute this program as the superuser"
+exit 1
+}
+
+function get_home {
+        # cf. <https://superuser.com/a/484330>.
+        getent passwd "$1"|cut -d: -f6
+}
+
+[[ "$HOME" == "$(get_home 0)" ]] || {
+echo "$0: You must run this script from a login shell"
 exit 1
 }
 
@@ -42,22 +56,18 @@ exit 1
 #
 # and install stow, which this script needs first to configure GNU GRUB.
 
-su "$SUDO_USER" << LF
+sudo -iu "$SUDO_USER" bash << LF
 
 #
-#         cd ~
 #         mkdir -p github.com/m5w
 #         cd github.com/m5w
-# 
+#
 # github.com/m5w/init/ should already exist.
-cd ~/github.com/m5w
+cd /github.com/m5w
 
 git clone https://github.com/m5w/terminal-logger.git terminal-logger
 LF
-
-# cf. <https://superuser.com/a/484330>.
-SUDO_HOME="$(getent passwd "$SUDO_USER"|cut -d: -f6)"
-
+SUDO_HOME="$(get_home "$SUDO_USER")"
 cd "$SUDO_HOME/github.com/m5w/terminal-logger"
 install -Dt /usr/local/bin terminal-logger
 
@@ -100,8 +110,7 @@ update-grub
 
 # Install the backup and upgrade scripts.
 
-su "$SUDO_USER" << LF
-cd ~
+sudo -iu "$SUDO_USER" bash << LF
 git clone https://github.com/m5w/stow.git stow
 LF
 cd "$SUDO_HOME/stow/backup"
@@ -127,8 +136,8 @@ terminal-logger apt-get -y update
 # Install vim.
 
 terminal-logger apt-get -y build-dep vim
-su "$SUDO_USER" << LF
-cd ~/github.com/m5w
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com/m5w
 git clone https://github.com/m5w/vim.git vim
 cd vim
 ./configure                                                                   \
@@ -149,8 +158,8 @@ make install
 # Configure vim.
 
 # ClangFormat
-su "$SUDO_USER" << LF
-cd ~/stow
+sudo -iu "$SUDO_USER" bash << LF
+cd stow
 stow clang-format
 LF
 terminal-logger apt-get -y install clang-format
@@ -183,15 +192,18 @@ terminal-logger apt-get -y install                                            \
         python-dev                                                            \
         python3-dev
 
-su "$SUDO_USER" << LF
+sudo -iu "$SUDO_USER" bash << LF
 mkdir -p ~/.vim/after/ftplugin
-cd ~/stow
+cd stow
 stow vim
 vim +qa
 LF
 
-su "$SUDO_USER" << LF
-cd ~/stow
+sudo -iu "$SUDO_USER" bash << LF
+trash-put                                                                     \
+        .bashrc                                                               \
+        .profile
+cd stow
 stow                                                                          \
         bash                                                                  \
         git
