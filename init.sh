@@ -84,7 +84,7 @@ install -Dt /usr/local/bin terminal-logger
 # performs this redundant and thus unnecessary update, this script does not use
 # the upgrade script.
 
-#terminal-logger apt-get -qy dist-upgrade
+terminal-logger apt-get -qy dist-upgrade
 terminal-logger apt-get -qy --purge autoremove
 
 # Install stow.
@@ -104,7 +104,6 @@ terminal-logger apt-get -qy install trash-cli
 trash-put grub
 
 cd stow
-git checkout VirtualBox
 stow grub
 update-grub
 
