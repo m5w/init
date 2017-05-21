@@ -27,57 +27,49 @@ exit 1
 # Really, we'd like to clone my dotfiles, stow .bash_aliases, and source it so
 # that we could use my aliases henceforth. However, we first need to install
 # stow, and we log all installations. Therefore, we first must clone and
-# install logger.
+# install terminal-logger.
 
 # Actually, those aliases aren't useful in this script---the ones that pertain
 # to some of what we need to do (update and install packages) automatically
 # invoke sudo and require user confirmation. Nonetheless, we still need stow to
-# configure GNU GRUB, and we still need logger foremost to update all of the
-# installed software.
+# configure GNU GRUB, and we still need terminal-logger foremost to update all
+# of the installed software.
 
+su "$SUDO_USER" <<\LF
 #cd "~$SUDO_USER"
 #mkdir -p github.com/m5w
 #cd github.com/m5w
-# <https://superuser.com/a/484330>
-su "$SUDO_USER" <<\LF
 cd ~/github.com/m5w  # github.com/m5w/init/ should already exist.
-git clone https://github.com/m5w/logger
+git clone https://github.com/m5w/terminal-logger
 LF
+# <https://superuser.com/a/484330>
 SUDO_HOME="$(getent passwd $SUDO_USER|cut -d: -f6)"
-cd "$SUDO_HOME/github.com/m5w/logger"
-install -Dt /opt/logger/bin logger.sh
+cd "$SUDO_HOME/github.com/m5w/terminal-logger"
+install -Dt /usr/local/bin terminal-logger
 
-# Add /opt/logger/bin to the PATH so that we can use logger. /etc/profile will
-# do this once we stow it, but we need logger before we can stow anything, and
-# /etc/profile checks if directories exist before adding them to the PATH
-# anyway, so we would have to source it after each installation to /opt/, which
-# would lead to duplicate directories in the PATH. Therefore, we add
-# directories manually to the PATH each time in this script.
+# Update all of the installed software. We should not use my upgrade script
+# because it performs an unnecessary update (cf. below).
 
-PATH="/opt/logger/bin:$PATH"
-
-# Update all of the installed software. We cannot use software-updater for
-# reasons similar to why my aliases are not useful.
-
-#logger.sh apt-get -qy update
-#logger.sh apt-get -qy dist-upgrade  # The user should have had to have run
-                                    #
-                                    #         sudo apt-get -q update
-                                    #
-                                    # before installing git, which should be
-                                    # installed.
-logger.sh apt-get -qy --purge autoremove
+#terminal-logger apt-get -qy update
+#terminal-logger apt-get -qy dist-upgrade  # The user should have had to have
+                                          # run
+                                          #
+                                          #         sudo apt-get -q update
+                                          #
+                                          # before installing git, which should
+                                          # be installed.
+terminal-logger apt-get -qy --purge autoremove
 
 # Install stow.
 
-logger.sh apt-get -qy install stow
+terminal-logger apt-get -qy install stow
 
 # Configure GNU GRUB.
 
 cd /etc/default
 git clone https://github.com/m5w/etc-default-stow.git stow
 #rm grub
-logger.sh apt-get -qy install trash-cli
+terminal-logger apt-get -qy install trash-cli
 trash-put grub  # We should preserve system files, just in case.
 cd stow
 git checkout VirtualBox
@@ -85,25 +77,68 @@ stow grub
 update-grub
 
 # Configure APT. We need source code to run
-#         logger.sh apt-get -qy build-dep vim
+#
+#         terminal-logger apt-get -qy build-dep vim
+#
 
 cd /etc/apt
 git clone https://github.com/m5w/etc-apt-stow.git stow
 trash-put sources.list
 cd stow
 stow apt
-logger.sh apt-get -qy update
+terminal-logger apt-get -qy update
 
 # Install vim.
 
-logger.sh apt-get -qy build-dep vim
+terminal-logger apt-get -qy build-dep vim
 su "$SUDO_USER" <<\LF
 cd ~/github.com/m5w
 git clone https://github.com/m5w/vim.git
 cd vim
 git checkout nuw
-./configure --prefix=/opt/vim --with-features=huge --enable-luainterp=yes --enable-perlinterp=yes --enable-python3interp=yes --enable-tclinterp=yes --enable-rubyinterp=yes --enable-gui=gtk2 --with-python3-config-dir=/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu
+./configure                                                                   \
+        --with-features=huge                                                  \
+        --enable-luainterp=yes                                                \
+        --enable-perlinterp=yes                                               \
+        --enable-python3interp=yes                                            \
+        --enable-tclinterp=yes                                                \
+        --enable-rubyinterp=yes                                               \
+        --enable-gui=gtk2                                                     \
+        --with-python3-config-dir=\
+/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu
 make
 LF
 cd "$SUDO_HOME/github.com/m5w/vim"
 make install
+
+# Configure vim.
+
+# plug
+terminal-logger apt-get -qy install curl
+
+# YCM-Generator
+terminal-logger apt-get -qy install                                          \
+        clang                                                                \
+        python
+
+# color_coded
+terminal-logger apt-get -qy install                                          \
+        cmake                                                                \
+        libclang-dev                                                         \
+        libncurses-dev                                                       \
+        libpthread-workqueue-dev                                             \
+        libz-dev                                                             \
+        xz-utils
+#terminal-logger apt-get -qy install "liblua$(
+#vim --version|
+#grep -- '-llua[1-9]\.[0-9]'|
+#sed 's/.*-llua\([1-9]\.[0-9]\).*/\1/')-dev"
+VIM_VERSION="$(vim --version)"
+LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
+[[ $VIM_VERSION =~ $LIBLUA_VERSION_PATTERN ]]
+terminal-logger apt-get -qy install "liblua${BASH_REMATCH[1]}-dev"
+
+# YouCompleteMe
+terminal-logger apt-get -qy install                                          \
+        python-dev                                                           \
+        python3-dev
