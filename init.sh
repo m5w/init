@@ -95,7 +95,6 @@ su "$SUDO_USER" <<\LF
 cd ~/github.com/m5w
 git clone https://github.com/m5w/vim.git
 cd vim
-git checkout nuw
 ./configure                                                                   \
         --with-features=huge                                                  \
         --enable-luainterp=yes                                                \
