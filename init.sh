@@ -48,13 +48,13 @@ echo "$0: You must run this script from a login shell"
 exit 1
 }
 
-# Install terminal-logger. This script needs it to upgrade all of the installed
-# software by running
+# Install terminal-logger. This script needs it first to upgrade all of the
+# installed software by running
 #
 #         terminal-logger apt-get -qy dist-upgrade
 #         terminal-logger apt-get -qy --purge autoremove
 #
-# and install stow, which this script needs first to configure GNU GRUB.
+# and install stow, which this script needs first to configure APT.
 
 sudo -iu "$SUDO_USER" bash << LF
 
@@ -91,18 +91,64 @@ terminal-logger apt-get -qy --purge autoremove
 
 terminal-logger apt-get -qy install stow
 
+# Configure APT.
+#
+# cf. "-q, --quiet". To read this section, type
+#
+#         man apt-get
+#
+# and move to the first match of "-q, --quiet".
+#
+# cf. "Available commands". To read this section, type
+#
+#         ubuntu-drivers --help
+#
+# This script needs
+#
+#         APT::Get::quiet "true";
+#
+# to ``Install drivers that are appropriate for automatic installation" by
+# running
+#
+#         terminal-logger ubuntu-drivers autoinstall
+#
+# since ubuntu-drivers uses apt-get, but "-q" cannot be passed on to the
+# apt-get instance that ubuntu-drivers uses.
+#
+# cf. "Kubuntu Software". To read this section, type
+#
+#         kdesudo software-properties-kde
+#
+# This script also needs ``Source code" to be ``Downloadable from the Internet"
+# to run
+#
+#         terminal-logger apt-get -y build-dep vim
+#
+
+cd /etc/apt
+git clone https://github.com/m5w/etc-apt-stow.git stow
+
+#
+#         rm sources.list
+#
+# System files should be preserved, just in case.
+terminal-logger apt-get -y install trash-cli
+trash-put sources.list
+
+cd stow
+stow apt
+
+# "-qy" is no longer necessary; only "-y" is.
+
+terminal-logger apt-get -y update
+
+terminal-logger ubuntu-drivers autoinstall
+
 # Configure GNU GRUB.
 
 cd /etc/default
 git clone https://github.com/m5w/etc-default-stow.git stow
-
-#
-#         rm grub
-#
-# System file should be preserved, just in case.
-terminal-logger apt-get -qy install trash-cli
 trash-put grub
-
 cd stow
 stow grub
 update-grub
@@ -116,21 +162,6 @@ cd "$SUDO_HOME/stow/backup"
 install -Dt /usr/local/bin backup
 cd "$SUDO_HOME/stow/upgrade"
 install -Dt /usr/local/bin upgrade
-
-# Configure APT. We need source code to run
-#
-#         terminal-logger apt-get -y build-dep vim
-#
-
-cd /etc/apt
-git clone https://github.com/m5w/etc-apt-stow.git stow
-trash-put sources.list
-cd stow
-stow apt
-
-# "-qy" is no longer necessary; only "-y" is.
-
-terminal-logger apt-get -y update
 
 # Install vim.
 
