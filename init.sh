@@ -147,7 +147,7 @@ git clone https://github.com/m5w/etc-apt-stow.git stow
 #     rm sources.list
 #
 # System files should be preserved, just in case.
-terminal-logger apt-get -y install trash-cli
+terminal-logger apt-get -qy install trash-cli
 trash-put sources.list
 
 cd stow
@@ -227,9 +227,9 @@ terminal-logger apt-get -y install                                            \
         libpthread-workqueue-dev                                              \
         libz-dev                                                              \
         xz-utils
-VIM_VERSION="$(vim --version)"
-LIBLUA_VERSION_PATTERN='-llua([0-9]\.[0-9])'
-[[ $VIM_VERSION =~ $LIBLUA_VERSION_PATTERN ]]
+_vim_version="$(vim --version)"
+_liblua_version_pattern='-llua([0-9]\.[0-9])'
+[[ $_vim_version =~ $_liblua_version_pattern ]]
 terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
