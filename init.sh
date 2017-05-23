@@ -53,7 +53,7 @@ unalias -a
 # directory at ``"$HOME/.local/share/Trash"`` if it does not find one there and
 # tries to open directories under this directory.  Therefore, the user must
 # also execute this script on a login shell.  The script actually runs as the
-# user by executing ``sudo -iu "$SUDO_USER" << LF`` instead of
+# user by executing ``sudo -iu "$SUDO_USER" bash << LF`` instead of
 # ``su "$SUDO_USER" << LF``, since the later would execute with ``HOME`` as the
 # superuser's home directory, not that of the user.
 #
@@ -73,9 +73,9 @@ echo "$0: You must invoke sudo to execute this program as the superuser on a log
 exit 1
 }
 
-# Install terminal-logger. This script needs terminal-logger first to
-# upgrade all of the installed software and then to install stow, which this
-# script needs first to configure APT.
+# Install terminal-logger.  This script needs terminal-logger first to upgrade
+# all of the installed software and then to install stow, which this script
+# needs first to configure APT.
 
 sudo -iu "$SUDO_USER" bash << LF
 
@@ -83,13 +83,13 @@ sudo -iu "$SUDO_USER" bash << LF
 #     mkdir -p github.com/m5w
 #     cd github.com/m5w
 #
-# github.com/m5w/init/ should already exist.
+# The directory github.com/m5w/init should already exist.
 cd github.com/m5w
 
 git clone https://github.com/m5w/terminal-logger.git terminal-logger
 LF
-sudo_home="$(_get_home "$SUDO_USER")"
-cd "$sudo_home/github.com/m5w/terminal-logger"
+_sudo_home="$(_get_home "$SUDO_USER")"
+cd "$_sudo_home/github.com/m5w/terminal-logger"
 install -Dt /usr/local/bin terminal-logger
 
 # Upgrade all of the installed software.
@@ -102,7 +102,7 @@ install -Dt /usr/local/bin terminal-logger
 #     sudo apt-get update
 #
 # before installing git, which the user also should have had to install before
-# downloading this script. Because the upgrade script performs this redundant
+# downloading this script.  Because the upgrade script performs this redundant
 # and thus unnecessary update, this script does not use the upgrade script.
 terminal-logger apt-get -qy dist-upgrade
 terminal-logger apt-get -qy --purge autoremove
@@ -111,39 +111,34 @@ terminal-logger apt-get -qy --purge autoremove
 
 terminal-logger apt-get -qy install stow
 
-# Configure APT.
+# Configure APT.  This script needs APT to have the following configuration
+# item[^1]
 #
-# cf. "-q, --quiet". To read this section, type
+#     APT::Get::quiet "true";
+#
+# to "Install drivers that are appropriate for automatic installation"[^2] by
+# executing ``terminal-logger ubuntu-drivers autoinstall``, since
+# ubuntu-drivers appears to invoke apt-get, but "-q" cannot be passed to the
+# apt-get instance that ubuntu-drivers uses.
+#
+# This script also needs "Source code" to be "Downloadable from the
+# Internet"[^3] to execute ``terminal-logger apt-get -y build-dep vim``.
+#
+# [^1]: cf. "-q, --quiet".  To read this section, execute the following command
 #
 #     man apt-get
 #
 # and move to the first match of "-q, --quiet".
 #
-# cf. "Available commands". To read this section, type
+# [^2]: cf. "Available commands".  To read this section, execute the following
+# command.
 #
 #     ubuntu-drivers --help
 #
-# This script needs
-#
-#     APT::Get::quiet "true";
-#
-# to ``Install drivers that are appropriate for automatic installation" by
-# running
-#
-#     terminal-logger ubuntu-drivers autoinstall
-#
-# since ubuntu-drivers uses apt-get, but "-q" cannot be passed on to the
-# apt-get instance that ubuntu-drivers uses.
-#
-# cf. "Kubuntu Software". To read this section, type
+# [^3]: cf. "Kubuntu Software".  To read this section, execute the following
+# command.
 #
 #     kdesudo software-properties-kde
-#
-# This script also needs ``Source code" to be ``Downloadable from the Internet"
-# to run
-#
-#     terminal-logger apt-get -y build-dep vim
-#
 
 cd /etc/apt
 git clone https://github.com/m5w/etc-apt-stow.git stow
@@ -178,9 +173,9 @@ update-grub
 sudo -iu "$SUDO_USER" bash << LF
 git clone https://github.com/m5w/stow.git stow
 LF
-cd "$sudo_home/stow/backup"
+cd "$_sudo_home/stow/backup"
 install -Dt /usr/local/bin backup
-cd "$sudo_home/stow/upgrade"
+cd "$_sudo_home/stow/upgrade"
 install -Dt /usr/local/bin upgrade
 
 # Install vim.
@@ -202,7 +197,7 @@ cd vim
 /usr/lib/python3.5/config-3.5m-x86_64-linux-gnu
 make
 LF
-cd "$sudo_home/github.com/m5w/vim"
+cd "$_sudo_home/github.com/m5w/vim"
 make install
 
 # Configure vim.
