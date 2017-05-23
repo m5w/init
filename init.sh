@@ -157,8 +157,6 @@ stow apt
 
 terminal-logger apt-get -y update
 
-terminal-logger ubuntu-drivers autoinstall
-
 # Configure GNU GRUB.
 
 cd /etc/default
