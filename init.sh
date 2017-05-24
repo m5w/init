@@ -207,7 +207,14 @@ stow clang-format
 LF
 terminal-logger apt-get -y install clang-format
 
-# to-do: eclim
+# to-do: Eclipse
+terminal-logger apt-get -y install openjdk-8-jre
+
+# to-do: Eclim
+terminal-logger apt-get -y install                                            \
+        gcc                                                                   \
+        make                                                                  \
+        openjdk-8-jdk
 
 # vim-plug
 terminal-logger apt-get -y install curl
@@ -220,7 +227,6 @@ terminal-logger apt-get -y install                                            \
 # color_coded
 terminal-logger apt-get -y install                                            \
         cmake                                                                 \
-        libclang-dev                                                          \
         libncurses-dev                                                        \
         libpthread-workqueue-dev                                              \
         libz-dev                                                              \
