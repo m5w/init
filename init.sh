@@ -175,7 +175,7 @@ update-grub
 # Install the backup and upgrade scripts.
 
 sudo -iu "$SUDO_USER" bash << LF
-git clone                                                                     \
+git clone --recursive                                                         \
         'https://github.com/m5w/stow.git'
 LF
 cd "$_sudo_home/stow/backup"
