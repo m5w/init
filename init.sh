@@ -92,6 +92,9 @@ LF
 _sudo_home="$(_get_home "$SUDO_USER")"
 cd "$_sudo_home/github.com/m5w/terminal-logger"
 install -Dt /usr/local/bin terminal-logger
+sudo -iu "$SUDO_USER" bash << LF
+mkdir .terminal-logger
+LF
 
 # Upgrade all of the installed software.
 
@@ -153,6 +156,11 @@ git clone                                                                     \
 #
 # System files should be preserved, just in case.
 terminal-logger apt-get -qy install trash-cli
+sudo -iu "$SUDO_USER" bash << LF
+mkdir -p .local/share/Trash
+cd .local/share/Trash
+mkdir files info
+LF
 trash-put sources.list
 
 cd stow
