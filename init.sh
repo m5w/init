@@ -22,7 +22,7 @@ unalias -a
 # if this script is executed as the superuser with sudo, the following code
 #
 #     su "$SUDO_USER" << LF
-#     echo "Hello, world!"
+#     echo 'Hello, world!'
 #     LF
 #
 # would execute ``echo "Hello, world!"`` as the user.  This script could also
@@ -388,3 +388,87 @@ cd matxin-eng
 lt-comp rl matxin-eng.eng.dix eng.autogen.bin
 matxin-preprocess-generate matxin-eng.eng.gnx eng.gnx.bin
 LF
+
+# Install SPASM-ng.
+
+terminal-logger apt-get -y install                                            \
+        libgmp-dev                                                            \
+        libssl-dev
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com
+mkdir alberthdev
+cd alberthdev
+git clone https://github.com/alberthdev/spasm-ng.git
+cd spasm-ng
+make
+LF
+cd "$_sudo_home/github.com/alberthdev/spasm-ng"
+make install
+
+# Install BinPac8x.
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget -O binpac8x.zip                                                          \
+https://www.cemetech.net/scripts/countdown.php?/win/asm/binpac8x.zip&path=archives
+mkdir binpac8x
+cd binpac8x
+unzip ../binpac8x.zip
+chmod +x binpac8x.py
+LF
+cd "$_sudo_home/Downloads/binpac8x"
+install -Dt /usr/local/bin binpac8x.py
+
+# Install Spotify.
+terminal-logger apt-key adv                                                   \
+        --keyserver=\
+hkp://keyserver.ubuntu.com:80                                                 \
+        --recv-keys=\
+BBEBDCB318AD50EC6865090613B00F1FD2C19886
+cat > /etc/apt/sources.list.d/spotify.list << LF
+deb http://repository.spotify.com stable non-free
+LF
+terminal-logger apt-get update
+terminal-logger apt-get -y install spotify-client
+
+terminal-logger pip3 -q install pyftpdlib
+
+for _package in                                                               \
+        baobab                                                                \
+        bleachbit                                                             \
+        bsd-mailx                                                             \
+        chromium-browser                                                      \
+        clang-modernize                                                       \
+        clang-tidy                                                            \
+        dos2unix                                                              \
+        easytag                                                               \
+        gimp                                                                  \
+        git-gui                                                               \
+        git-svn                                                               \
+        gnome-disk-utility                                                    \
+        idle3                                                                 \
+        iotop                                                                 \
+        keepass2                                                              \
+        keepassx                                                              \
+        libboost-all-dev                                                      \
+        lilypond                                                              \
+        lldb                                                                  \
+        markdown                                                              \
+        nasm                                                                  \
+        pandoc                                                                \
+        pastebinit                                                            \
+        proot                                                                 \
+        qemu-user                                                             \
+        screen                                                                \
+        smartmontools                                                         \
+        ssmtp                                                                 \
+        steam                                                                 \
+        texlive-full                                                          \
+        tilp2                                                                 \
+        timidity                                                              \
+        thunderbird                                                           \
+        usb-creator-kde                                                       \
+        valgrind                                                              \
+        weechat
+do
+        terminal-logger apt-get -y install "$_package"
+done
