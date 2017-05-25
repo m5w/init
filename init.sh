@@ -491,3 +491,13 @@ for _package in                                                               \
 do
         terminal-logger apt-get -y install "$_package"
 done
+
+sudo -iu "$SUDO_USER" << LF
+cd Downloads
+wget                                                                          \
+        'http://mirrors.ctan.org/macros/latex/contrib/mla-paper.zip'
+cd
+mkdir -p texmf/tex/latex
+cd texmf/tex/latex
+unzip ~/Downloads/mla-paper.zip
+LF
