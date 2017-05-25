@@ -183,6 +183,7 @@ sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
 git clone https://github.com/m5w/vim.git
 cd vim
+git remote add upstream https://github.com/vim/vim.git
 ./configure                                                                   \
         --with-features=huge                                                  \
         --enable-luainterp=yes                                                \
@@ -313,6 +314,7 @@ done
 # Install Matxin.
 
 terminal-logger apt-get -y install                                            \
+        libboost-system-dev                                                   \
         libxslt1-dbg                                                          \
         libxslt1-dev
 sudo -iu "$SUDO_USER" bash << LF
@@ -323,7 +325,6 @@ LF
 "$_sudo_home/Downloads/install-nightly.sh"
 terminal-logger apt-get -y install                                            \
         foma-bin                                                              \
-        libfoma0-dbg                                                          \
         libfoma0-dev
 
 # upstream
@@ -344,6 +345,7 @@ sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
 git clone https://github.com/m5w/matxin.git
 cd matxin
+git remote add upstream https://github.com/matxin/matxin.git
 ./autogen.sh
 make
 LF
