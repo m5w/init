@@ -297,11 +297,9 @@ terminal-logger apt-get -y install                                            \
         xsltproc                                                              \
         zlib1g-dbg                                                            \
         zlib1g-dev
-
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p svn.code.sf.net/p/apertium/svn/trunk
 LF
-
 for _directory in                                                             \
         lttoolbox                                                             \
         apertium                                                              \
@@ -424,6 +422,7 @@ cd "$_sudo_home/github.com/alberthdev/spasm-ng"
 make install
 
 # Install BinPac8x.
+
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget -O binpac8x.zip                                                          \
@@ -437,6 +436,7 @@ cd "$_sudo_home/Downloads/binpac8x"
 install -Dt /usr/local/bin binpac8x.py
 
 # Install Spotify.
+
 terminal-logger apt-key adv                                                   \
         --keyserver \
 hkp://keyserver.ubuntu.com:80                                                 \
