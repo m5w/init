@@ -113,15 +113,16 @@ terminal-logger apt-get -qy --purge autoremove
 
 terminal-logger apt-get -qy install stow
 
-# Configure APT.  This script needs APT to have the following configuration
+# Configure APT.  It is necessary for APT to have the following configuration
 # item[^1]
 #
 #     APT::Get::quiet "true";
 #
-# to "Install drivers that are appropriate for automatic installation"[^2] by
-# executing ``terminal-logger ubuntu-drivers autoinstall``, since
-# ubuntu-drivers appears to invoke apt-get, but "-q" cannot be passed to the
-# apt-get instance that ubuntu-drivers uses.
+# for the user to "Install drivers that are appropriate for automatic
+# installation"[^2] by executing
+# ``terminal-logger ubuntu-drivers autoinstall``, since ubuntu-drivers appears
+# to invoke apt-get, but "-q" cannot be passed to the apt-get instance that
+# ubuntu-drivers uses.
 #
 # This script also needs "Source code" to be "Downloadable from the
 # Internet"[^3] to execute ``terminal-logger apt-get -y build-dep vim``.
@@ -275,6 +276,8 @@ LF
 terminal-logger apt-get -y install python3-pip
 terminal-logger pip3 -q install yapf
 
+# Configure GNU Bash and Git.
+
 sudo -iu "$SUDO_USER" bash << LF
 trash-put                                                                     \
         .bashrc                                                               \
@@ -284,6 +287,8 @@ stow                                                                          \
         bash                                                                  \
         git
 LF
+
+# Configure Git for the superuser.
 
 cd
 git clone --recursive                                                         \
@@ -517,7 +522,7 @@ do
         terminal-logger apt-get -y install "$_package"
 done
 
-# Installing each of these packages is interactive.
+# Installing each of the following packages is interactive.
 
 cat << LF
 for _package in                                                               \
