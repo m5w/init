@@ -552,6 +552,7 @@ done
 # Installing each of the following packages is interactive.
 
 cat << \LF
+sudo ubuntu-drivers autoinstall
 for _package in                                                               \
         bsd-mailx                                                             \
         steam
