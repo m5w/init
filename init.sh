@@ -364,3 +364,27 @@ git clone https://github.com/matxin/matxin-lineariser.git
 cd matxin-lineariser/tg
 ant
 LF
+
+# matxin-lat
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com/m5w
+git clone https://github.com/m5w/matxin-lat.git
+LF
+
+# matxin-lat-eng
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com/m5w
+git clone https://github.com/m5w/matxin-lat-eng.git
+cd matxin-lat-eng
+lt-comp lr matxin-lat-eng.lat-eng.dix lat-eng.autobil.bin
+matxin-preprocess-transfer matxin-lat-eng.lat-eng.t1x lat-eng.t1x.bin
+LF
+
+# matxin-eng
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com/m5w
+git clone https://github.com/m5w/matxin-eng.git
+cd matxin-eng
+lt-comp rl matxin-eng.eng.dix eng.autogen.bin
+matxin-preprocess-generate matxin-eng.eng.gnx eng.gnx.bin
+LF
