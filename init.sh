@@ -69,7 +69,7 @@ _get_home () {
 }
 
 (($EUID == 0)) && [[ $HOME == $(_get_home 0) ]] && [[ -n $SUDO_USER ]] || {
-echo "$0: You must invoke sudo to execute this program as the superuser on a login shell"|fold --spaces --width=79
+echo "$0: You must invoke sudo to execute this program as the superuser on a login shell"|fold -sw 79
 exit 1
 }
 
@@ -207,14 +207,26 @@ stow clang-format
 LF
 terminal-logger apt-get -y install clang-format
 
-# to-do: Eclipse
+# Eclipse
 terminal-logger apt-get -y install openjdk-8-jre
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz
+LF
+cd "$SUDO_HOME/Downloads"
+tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
 
 # to-do: Eclim
 terminal-logger apt-get -y install                                            \
         gcc                                                                   \
         make                                                                  \
         openjdk-8-jdk
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+LF
 
 # vim-plug
 terminal-logger apt-get -y install curl
@@ -226,6 +238,7 @@ terminal-logger apt-get -y install                                            \
 
 # color_coded
 terminal-logger apt-get -y install                                            \
+        build-essential                                                       \
         cmake                                                                 \
         libncurses-dev                                                        \
         libpthread-workqueue-dev                                              \
@@ -257,3 +270,41 @@ stow                                                                          \
         bash                                                                  \
         git
 LF
+
+# Install Apertium.
+
+terminal-logger apt-get -y install                                            \
+        automake                                                              \
+        flex                                                                  \
+        gawk                                                                  \
+        libpcre3-dev                                                          \
+        libtool                                                               \
+        libxml2-dev                                                           \
+        libxml2-utils                                                         \
+        pkg-config                                                            \
+        subversion                                                            \
+        xsltproc                                                              \
+        zlib1g-dev
+
+sudo -iu "$SUDO_USER" bash << LF
+mkdir -p svn.code.sf.net/p/apertium/svn/trunk
+cd svn.code.sf.net/p/apertium/svn/trunk
+svn co https://svn.code.sf.net/p/apertium/svn/trunk/lttoolbox
+svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium
+svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium-lex-tools
+LF
+
+for _directory in                                                             \
+        lttoolbox                                                             \
+        apertium                                                              \
+        apertium-lex-tools
+do
+        sudo -iu "$SUDO_USER" bash << LF
+cd "svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+./autogen.sh
+make
+LF
+        cd "$SUDO_HOME/svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+        make install
+        ldconfig
+done
