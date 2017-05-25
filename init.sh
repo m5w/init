@@ -214,7 +214,7 @@ cd Downloads
 wget                                                                          \
         http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz
 LF
-cd "$SUDO_HOME/Downloads"
+cd "$_sudo_home/Downloads"
 tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
 
 # to-do: Eclim
@@ -304,7 +304,7 @@ cd "svn.code.sf.net/p/apertium/svn/trunk/$_directory"
 ./autogen.sh
 make
 LF
-        cd "$SUDO_HOME/svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+        cd "$_sudo_home/svn.code.sf.net/p/apertium/svn/trunk/$_directory"
         make install
         ldconfig
 done
