@@ -553,6 +553,7 @@ done
 
 cat << \LF
 sudo ubuntu-drivers autoinstall
+java -jar ~/Downloads/eclim_2.6.0.jar
 for _package in                                                               \
         bsd-mailx                                                             \
         steam
