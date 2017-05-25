@@ -229,10 +229,7 @@ cd "$_sudo_home/Downloads"
 tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
 
 # to-do: Eclim
-terminal-logger apt-get -y install                                            \
-        gcc                                                                   \
-        make                                                                  \
-        openjdk-8-jdk
+terminal-logger apt-get -y install openjdk-8-jdk
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
@@ -334,6 +331,11 @@ LF
         make install
         ldconfig
 done
+sudo -iu "$SUDO_USER" bash << LF
+cd svn.code.sf.net/p/apertium/svn/trunk
+svn co                                                                        \
+        'https://svn.code.sf.net/p/apertium/svn/trunk/apertium-tools'
+LF
 
 # Install Matxin.
 
@@ -378,6 +380,13 @@ make
 LF
 
 # matxin-lineariser
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com
+mkdir moses-smt
+cd moses-smt
+git clone                                                                     \
+        'https://github.com/moses-smt/mosesdecoder.git'
+LF
 terminal-logger pip3 -q install                                               \
         matplotlib                                                            \
         nltk                                                                  \
@@ -390,6 +399,15 @@ git clone                                                                     \
         'https://github.com/matxin/matxin-lineariser.git'
 cd matxin-lineariser/tg
 ant
+LF
+sudo -iu "$SUDO_USER" bash << LF
+cd github.com
+mkdir ufal
+cd ufal
+git clone                                                                     \
+        'https://github.com/ufal/udpipe.git'
+cd udpipe/src
+make
 LF
 
 # matxin-lat
@@ -465,6 +483,7 @@ terminal-logger apt-get -y install spotify-client
 
 # Install LaTeX.
 
+terminal-logger apt-get -y install gnuplot
 terminal-logger apt-get -y install texlive-full
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
