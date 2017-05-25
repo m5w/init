@@ -86,7 +86,7 @@ sudo -iu "$SUDO_USER" bash << LF
 # The directory github.com/m5w/init should already exist.
 cd github.com/m5w
 
-git clone https://github.com/m5w/terminal-logger.git terminal-logger
+git clone https://github.com/m5w/terminal-logger.git
 LF
 _sudo_home="$(_get_home "$SUDO_USER")"
 cd "$_sudo_home/github.com/m5w/terminal-logger"
@@ -169,7 +169,7 @@ update-grub
 # Install the backup and upgrade scripts.
 
 sudo -iu "$SUDO_USER" bash << LF
-git clone https://github.com/m5w/stow.git stow
+git clone https://github.com/m5w/stow.git
 LF
 cd "$_sudo_home/stow/backup"
 install -Dt /usr/local/bin backup
@@ -181,7 +181,7 @@ install -Dt /usr/local/bin upgrade
 terminal-logger apt-get -y build-dep vim
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/vim.git vim
+git clone https://github.com/m5w/vim.git
 cd vim
 ./configure                                                                   \
         --with-features=huge                                                  \
@@ -288,10 +288,6 @@ terminal-logger apt-get -y install                                            \
 
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p svn.code.sf.net/p/apertium/svn/trunk
-cd svn.code.sf.net/p/apertium/svn/trunk
-svn co https://svn.code.sf.net/p/apertium/svn/trunk/lttoolbox
-svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium
-svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium-lex-tools
 LF
 
 for _directory in                                                             \
@@ -300,7 +296,9 @@ for _directory in                                                             \
         apertium-lex-tools
 do
         sudo -iu "$SUDO_USER" bash << LF
-cd "svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+cd svn.code.sf.net/p/apertium/svn/trunk
+svn co "https://svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+cd "$_directory"
 ./autogen.sh
 make
 LF
