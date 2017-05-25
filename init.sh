@@ -312,20 +312,21 @@ done
 
 # Install Matxin.
 
+terminal-logger apt-get -y install                                            \
+        libxslt1-dbg                                                          \
+        libxslt1-dev
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget https://apertium.projectjj.com/apt/install-nightly.sh
 chmod +x install-nightly.sh
 LF
 "$_sudo_home/Downloads/install-nightly.sh"
-
 terminal-logger apt-get -y install                                            \
         foma-bin                                                              \
         libfoma0-dbg                                                          \
-        libfoma0-dev                                                          \
-        libxslt1-dbg                                                          \
-        libxslt1-dev
+        libfoma0-dev
 
+# upstream
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com
 mkdir matxin
@@ -338,6 +339,7 @@ LF
 cd "$_sudo_home/github.com/matxin/matxin"
 make install
 
+# origin
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
 git clone https://github.com/m5w/matxin.git
@@ -346,18 +348,14 @@ cd matxin
 make
 LF
 
-# Install matxin-lineariser.
-
-terminal-logger apt-get -y install                                            \
-        ant                                                                   \
-        python3-pip
-
+# matxin-lineariser
+terminal-logger apt-get -y install python3-pip
 terminal-logger pip3 -q install                                               \
         matplotlib                                                            \
         nltk                                                                  \
         numpy                                                                 \
         scikit-learn
-
+terminal-logger apt-get -y install ant
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/matxin
 git clone https://github.com/matxin/matxin-lineariser.git
