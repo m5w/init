@@ -551,7 +551,7 @@ done
 
 # Installing each of the following packages is interactive.
 
-cat << LF
+cat << \LF
 for _package in                                                               \
         bsd-mailx                                                             \
         steam
