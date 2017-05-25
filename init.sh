@@ -86,7 +86,8 @@ sudo -iu "$SUDO_USER" bash << LF
 # The directory github.com/m5w/init should already exist.
 cd github.com/m5w
 
-git clone https://github.com/m5w/terminal-logger.git
+git clone                                                                     \
+        'https://github.com/m5w/terminal-logger.git'
 LF
 _sudo_home="$(_get_home "$SUDO_USER")"
 cd "$_sudo_home/github.com/m5w/terminal-logger"
@@ -141,7 +142,9 @@ terminal-logger apt-get -qy install stow
 #     kdesudo software-properties-kde
 
 cd /etc/apt
-git clone https://github.com/m5w/etc-apt-stow.git stow
+git clone                                                                     \
+        'https://github.com/m5w/etc-apt-stow.git'                             \
+        stow
 
 #
 #     rm sources.list
@@ -160,7 +163,9 @@ terminal-logger apt-get -y update
 # Configure GNU GRUB.
 
 cd /etc/default
-git clone https://github.com/m5w/etc-default-stow.git stow
+git clone                                                                     \
+        'https://github.com/m5w/etc-default-stow.git'                         \
+        stow
 trash-put grub
 cd stow
 stow grub
@@ -169,7 +174,8 @@ update-grub
 # Install the backup and upgrade scripts.
 
 sudo -iu "$SUDO_USER" bash << LF
-git clone https://github.com/m5w/stow.git
+git clone                                                                     \
+        'https://github.com/m5w/stow.git'
 LF
 cd "$_sudo_home/stow/backup"
 install -Dt /usr/local/bin backup
@@ -181,9 +187,11 @@ install -Dt /usr/local/bin upgrade
 terminal-logger apt-get -y build-dep vim
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/vim.git
+git clone                                                                     \
+        'https://github.com/m5w/vim.git'
 cd vim
-git remote add upstream https://github.com/vim/vim.git
+git remote add upstream                                                       \
+        'https://github.com/vim/vim.git'
 ./configure                                                                   \
         --with-features=huge                                                  \
         --enable-luainterp=yes                                                \
@@ -213,7 +221,7 @@ terminal-logger apt-get -y install openjdk-8-jre
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
-        http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz
+        'http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz'
 LF
 cd "$_sudo_home/Downloads"
 tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
@@ -226,7 +234,7 @@ terminal-logger apt-get -y install                                            \
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
-        https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+        'https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar'
 LF
 
 # vim-plug
@@ -301,7 +309,8 @@ for _directory in                                                             \
 do
         sudo -iu "$SUDO_USER" bash << LF
 cd svn.code.sf.net/p/apertium/svn/trunk
-svn co "https://svn.code.sf.net/p/apertium/svn/trunk/$_directory"
+svn co                                                                        \
+        "https://svn.code.sf.net/p/apertium/svn/trunk/$_directory"
 cd "$_directory"
 ./autogen.sh
 make
@@ -319,7 +328,8 @@ terminal-logger apt-get -y install                                            \
         libxslt1-dev
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
-wget https://apertium.projectjj.com/apt/install-nightly.sh
+wget                                                                          \
+        'https://apertium.projectjj.com/apt/install-nightly.sh'
 chmod +x install-nightly.sh
 LF
 "$_sudo_home/Downloads/install-nightly.sh"
@@ -332,7 +342,8 @@ sudo -iu "$SUDO_USER" bash << LF
 cd github.com
 mkdir matxin
 cd matxin
-git clone https://github.com/matxin/matxin.git
+git clone                                                                     \
+        'https://github.com/matxin/matxin.git'
 cd matxin
 ./autogen.sh
 make
@@ -343,9 +354,11 @@ make install
 # origin
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/matxin.git
+git clone                                                                     \
+        'https://github.com/m5w/matxin.git'
 cd matxin
-git remote add upstream https://github.com/matxin/matxin.git
+git remote add upstream                                                       \
+        'https://github.com/matxin/matxin.git'
 ./autogen.sh
 make
 LF
@@ -360,7 +373,8 @@ terminal-logger pip3 -q install                                               \
 terminal-logger apt-get -y install ant
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/matxin
-git clone https://github.com/matxin/matxin-lineariser.git
+git clone                                                                     \
+        'https://github.com/matxin/matxin-lineariser.git'
 cd matxin-lineariser/tg
 ant
 LF
@@ -368,13 +382,15 @@ LF
 # matxin-lat
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/matxin-lat.git
+git clone                                                                     \
+        'https://github.com/m5w/matxin-lat.git'
 LF
 
 # matxin-lat-eng
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/matxin-lat-eng.git
+git clone                                                                     \
+        'https://github.com/m5w/matxin-lat-eng.git'
 cd matxin-lat-eng
 lt-comp lr matxin-lat-eng.lat-eng.dix lat-eng.autobil.bin
 matxin-preprocess-transfer matxin-lat-eng.lat-eng.t1x lat-eng.t1x.bin
@@ -383,7 +399,8 @@ LF
 # matxin-eng
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
-git clone https://github.com/m5w/matxin-eng.git
+git clone                                                                     \
+        'https://github.com/m5w/matxin-eng.git'
 cd matxin-eng
 lt-comp rl matxin-eng.eng.dix eng.autogen.bin
 matxin-preprocess-generate matxin-eng.eng.gnx eng.gnx.bin
@@ -398,7 +415,8 @@ sudo -iu "$SUDO_USER" bash << LF
 cd github.com
 mkdir alberthdev
 cd alberthdev
-git clone https://github.com/alberthdev/spasm-ng.git
+git clone                                                                     \
+        'https://github.com/alberthdev/spasm-ng.git'
 cd spasm-ng
 make
 LF
@@ -409,7 +427,7 @@ make install
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget -O binpac8x.zip                                                          \
-https://www.cemetech.net/scripts/countdown.php?/win/asm/binpac8x.zip&path=archives
+        'https://www.cemetech.net/scripts/countdown.php?/win/asm/binpac8x.zip&path=archives'
 mkdir binpac8x
 cd binpac8x
 unzip ../binpac8x.zip
@@ -420,9 +438,10 @@ install -Dt /usr/local/bin binpac8x.py
 
 # Install Spotify.
 terminal-logger apt-key adv                                                   \
-        --keyserver=\
+        --keyserver \
 hkp://keyserver.ubuntu.com:80                                                 \
-        --recv-keys=\
+
+        --recv-keys \
 BBEBDCB318AD50EC6865090613B00F1FD2C19886
 cat > /etc/apt/sources.list.d/spotify.list << LF
 deb http://repository.spotify.com stable non-free
@@ -430,14 +449,15 @@ LF
 terminal-logger apt-get update
 terminal-logger apt-get -y install spotify-client
 
-terminal-logger pip3 -q install pyftpdlib
+terminal-logger pip3 -q install                                               \
+        pyftpdlib                                                             \
+        yapf
 
 for _package in                                                               \
         baobab                                                                \
         bleachbit                                                             \
         bsd-mailx                                                             \
         chromium-browser                                                      \
-        clang-modernize                                                       \
         clang-tidy                                                            \
         dos2unix                                                              \
         easytag                                                               \
