@@ -16,6 +16,11 @@
 set -eo pipefail
 unalias -a
 
+_get_home () {
+        # cf. <https://superuser.com/a/484330>
+        getent passwd "$1"|cut -d: -f6
+}
+
 # This script needs to run as the superuser.  However, it also needs to run as
 # the user.  sudo solves this problem by setting the environmental variable
 # ``SUDO_USER`` to "the login name of the user who invoked sudo"[^1], and so,
@@ -63,11 +68,6 @@ unalias -a
 #
 # and move to the first match of "ENVIRONMENT".
 
-_get_home () {
-        # cf. <https://superuser.com/a/484330>
-        getent passwd "$1"|cut -d: -f6
-}
-
 (($EUID == 0)) && [[ $HOME == $(_get_home 0) ]] && [[ -n $SUDO_USER ]] || {
 echo "$0: You must invoke sudo to execute this program as the superuser on a login shell"|fold -sw 79
 exit 1
@@ -102,9 +102,10 @@ install -Dt /usr/local/bin terminal-logger
 #
 #     sudo apt-get update
 #
-# before installing git, which the user also should have had to install before
+# before installing git, which the user should have had to install before
 # downloading this script.  Because the upgrade script performs this redundant
-# and thus unnecessary update, this script does not use the upgrade script.
+# and thus unnecessary update, this script does not use the upgrade script
+# here.
 terminal-logger apt-get -qy dist-upgrade
 terminal-logger apt-get -qy --purge autoremove
 
@@ -270,6 +271,10 @@ stow vim
 vim +qa
 LF
 
+# yapf
+terminal-logger apt-get -y install python3-pip
+terminal-logger pip3 -q install yapf
+
 sudo -iu "$SUDO_USER" bash << LF
 trash-put                                                                     \
         .bashrc                                                               \
@@ -279,6 +284,13 @@ stow                                                                          \
         bash                                                                  \
         git
 LF
+
+cd
+git clone --recursive                                                         \
+        'https://github.com/m5w/root-stow.git'                                \
+        stow
+cd stow
+stow git
 
 # Install Apertium.
 
@@ -321,7 +333,6 @@ done
 # Install Matxin.
 
 terminal-logger apt-get -y install                                            \
-        libboost-system-dev                                                   \
         libxslt1-dbg                                                          \
         libxslt1-dev
 sudo -iu "$SUDO_USER" bash << LF
@@ -362,7 +373,6 @@ make
 LF
 
 # matxin-lineariser
-terminal-logger apt-get -y install python3-pip
 terminal-logger pip3 -q install                                               \
         matplotlib                                                            \
         nltk                                                                  \
@@ -439,7 +449,7 @@ install -Dt /usr/local/bin binpac8x.py
 
 terminal-logger apt-key adv                                                   \
         --keyserver \
-hkp://keyserver.ubuntu.com:80                                                 \
+'hkp://keyserver.ubuntu.com:80'                                               \
         --recv-keys \
 BBEBDCB318AD50EC6865090613B00F1FD2C19886
 cat > /etc/apt/sources.list.d/spotify.list << LF
@@ -448,14 +458,32 @@ LF
 terminal-logger apt-get update
 terminal-logger apt-get -y install spotify-client
 
-terminal-logger pip3 -q install                                               \
-        pyftpdlib                                                             \
-        yapf
+# Install LaTeX.
+
+terminal-logger apt-get -y install texlive-full
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'http://mirrors.ctan.org/macros/latex/contrib/mla-paper.zip'
+cd
+mkdir -p texmf/tex/latex
+cd texmf/tex/latex
+unzip ~/Downloads/mla-paper.zip
+LF
+
+# Install pip packages.
+
+for _package in                                                               \
+        pyftpdlib
+do
+        terminal-logger pip3 -q install "$_package"
+done
+
+# Install packages.
 
 for _package in                                                               \
         baobab                                                                \
         bleachbit                                                             \
-        bsd-mailx                                                             \
         chromium-browser                                                      \
         clang-tidy                                                            \
         dos2unix                                                              \
@@ -463,7 +491,6 @@ for _package in                                                               \
         gimp                                                                  \
         git-gui                                                               \
         git-svn                                                               \
-        gnome-disk-utility                                                    \
         idle3                                                                 \
         iotop                                                                 \
         keepass2                                                              \
@@ -480,8 +507,6 @@ for _package in                                                               \
         screen                                                                \
         smartmontools                                                         \
         ssmtp                                                                 \
-        steam                                                                 \
-        texlive-full                                                          \
         tilp2                                                                 \
         timidity                                                              \
         thunderbird                                                           \
@@ -492,12 +517,13 @@ do
         terminal-logger apt-get -y install "$_package"
 done
 
-sudo -iu "$SUDO_USER" << LF
-cd Downloads
-wget                                                                          \
-        'http://mirrors.ctan.org/macros/latex/contrib/mla-paper.zip'
-cd
-mkdir -p texmf/tex/latex
-cd texmf/tex/latex
-unzip ~/Downloads/mla-paper.zip
+# Installing each of these packages is interactive.
+
+cat << LF
+for _package in                                                               \
+        bsd-mailx                                                             \
+        steam
+do
+        sudo terminal-logger apt-get install "$_package"
+done
 LF
