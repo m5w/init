@@ -505,17 +505,14 @@ LF
 
 # Install pip packages.
 
-for _package in                                                               \
-        pyftpdlib
-do
-        terminal-logger pip3 -q install "$_package"
-done
+terminal-logger pip3 -q install pyftpdlib
 
 # Install packages.
 
-for _package in                                                               \
+terminal-logger apt-get -y install                                            \
         baobab                                                                \
         bleachbit                                                             \
+        bsd-mailx                                                             \
         chromium-browser                                                      \
         clang-tidy                                                            \
         dos2unix                                                              \
@@ -545,19 +542,13 @@ for _package in                                                               \
         usb-creator-kde                                                       \
         valgrind                                                              \
         weechat
-do
-        terminal-logger apt-get -y install "$_package"
-done
-
-# Installing each of the following packages is interactive.
 
 cat << \LF
-sudo ubuntu-drivers autoinstall
+# Installing drivers may fail.
+sudo terminal-logger ubuntu-drivers autoinstall
+
 java -jar ~/Downloads/eclim_2.6.0.jar
-for _package in                                                               \
-        bsd-mailx                                                             \
-        steam
-do
-        sudo terminal-logger apt-get install "$_package"
-done
+
+# Installing steam requires (interactively) accepting a license agreement.
+sudo terminal-logger apt-get install steam
 LF
