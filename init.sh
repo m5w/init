@@ -515,6 +515,7 @@ terminal-logger apt-get -y install                                            \
         baobab                                                                \
         bleachbit                                                             \
         bsd-mailx                                                             \
+        chkrootkit                                                            \
         chromium-browser                                                      \
         clang-tidy                                                            \
         dos2unix                                                              \
@@ -522,6 +523,7 @@ terminal-logger apt-get -y install                                            \
         gimp                                                                  \
         git-gui                                                               \
         git-svn                                                               \
+        gufw                                                                  \
         idle3                                                                 \
         iotop                                                                 \
         keepass2                                                              \
