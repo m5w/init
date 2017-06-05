@@ -290,7 +290,9 @@ trash-put                                                                     \
 cd stow
 stow                                                                          \
         bash                                                                  \
-        git
+        git                                                                   \
+        konsole                                                               \
+        systemsettings5
 LF
 
 # Configure Git for the superuser.
@@ -531,16 +533,18 @@ terminal-logger apt-get -y install                                            \
         nasm                                                                  \
         pandoc                                                                \
         pastebinit                                                            \
+        pavucontrol                                                           \
         proot                                                                 \
         qemu-user                                                             \
         screen                                                                \
         smartmontools                                                         \
         ssmtp                                                                 \
+        thunderbird                                                           \
         tilp2                                                                 \
         timidity                                                              \
-        thunderbird                                                           \
         usb-creator-kde                                                       \
         valgrind                                                              \
+        virtualbox                                                            \
         weechat
 
 cat << \LF
