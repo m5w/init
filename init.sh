@@ -195,6 +195,7 @@ install -Dt /usr/local/bin upgrade
 # Install vim.
 
 terminal-logger apt-get -y build-dep vim
+terminal-logger apt-get -y install python-dev
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
 git clone                                                                     \
@@ -206,12 +207,12 @@ git remote add upstream                                                       \
         --with-features=huge                                                  \
         --enable-luainterp=yes                                                \
         --enable-perlinterp=yes                                               \
-        --enable-python3interp=yes                                            \
+        --enable-pythoninterp=yes                                             \
         --enable-tclinterp=yes                                                \
         --enable-rubyinterp=yes                                               \
         --enable-gui=gtk2                                                     \
-        --with-python3-config-dir=\
-/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu
+        --with-python-config-dir=\
+/usr/lib/python2.7/config-x86_64-linux-gnu
 make
 LF
 cd "$_sudo_home/github.com/m5w/vim"
@@ -266,9 +267,7 @@ _liblua_version_pattern='-llua([0-9]\.[0-9])'
 terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
-terminal-logger apt-get -y install                                            \
-        python-dev                                                            \
-        python3-dev
+terminal-logger apt-get -y install python3-dev
 
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p ~/.vim/after/ftplugin
