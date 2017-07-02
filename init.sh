@@ -195,7 +195,10 @@ install -Dt /usr/local/bin upgrade
 # Install vim.
 
 terminal-logger apt-get -y build-dep vim
-terminal-logger apt-get -y install python-dev
+terminal-logger apt-get -y install                                            \
+        python-dbg                                                            \
+        python-dev                                                            \
+        python-doc
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/m5w
 git clone                                                                     \
@@ -228,7 +231,7 @@ LF
 terminal-logger apt-get -y install clang-format
 
 # Eclipse
-terminal-logger apt-get -y install openjdk-8-jre
+terminal-logger apt-get -y install openjdk-8-doc
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
@@ -249,25 +252,28 @@ LF
 terminal-logger apt-get -y install curl
 
 # YCM-Generator
-terminal-logger apt-get -y install                                            \
-        clang                                                                 \
-        python
+terminal-logger apt-get -y install clang
 
 # color_coded
 terminal-logger apt-get -y install                                            \
         build-essential                                                       \
         cmake                                                                 \
-        libncurses-dev                                                        \
+        cmake-doc                                                             \
+        libncurses5-dbg                                                       \
+        libncurses5-dev                                                       \
         libpthread-workqueue-dev                                              \
-        libz-dev                                                              \
-        xz-utils
+        zlib1g-dbg                                                            \
+        zlib1g-dev
 _vim_version="$(vim --version)"
 _liblua_version_pattern='-llua([0-9]\.[0-9])'
 [[ $_vim_version =~ $_liblua_version_pattern ]]
 terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
-terminal-logger apt-get -y install python3-dev
+terminal-logger apt-get -y install                                            \
+        python3-dbg                                                           \
+        python3-dev                                                           \
+        python3-doc
 terminal-logger apt-get -y install                                            \
         mono-complete                                                         \
         mono-dbg
@@ -311,18 +317,19 @@ stow git
 terminal-logger apt-get -y install                                            \
         automake                                                              \
         flex                                                                  \
+        flex-doc                                                              \
         gawk                                                                  \
+        gawk-doc                                                              \
         libpcre3-dbg                                                          \
         libpcre3-dev                                                          \
         libtool                                                               \
+        libtool-doc                                                           \
         libxml2-dbg                                                           \
         libxml2-dev                                                           \
-        libxml2-utils                                                         \
+        libxml2-doc                                                           \
         pkg-config                                                            \
         subversion                                                            \
-        xsltproc                                                              \
-        zlib1g-dbg                                                            \
-        zlib1g-dev
+        xsltproc
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p svn.code.sf.net/p/apertium/svn/trunk
 LF
@@ -404,7 +411,9 @@ terminal-logger apt-get -y install                                            \
         python3-nltk                                                          \
         python3-numpy
 terminal-logger pip3 -q install scikit-learn
-terminal-logger apt-get -y install ant
+terminal-logger apt-get -y install                                            \
+        ant                                                                   \
+        ant-doc
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/matxin
 git clone                                                                     \
@@ -453,7 +462,8 @@ LF
 
 terminal-logger apt-get -y install                                            \
         libgmp-dev                                                            \
-        libssl-dev
+        libssl-dev                                                            \
+        libssl-doc
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com
 mkdir alberthdev
@@ -495,7 +505,9 @@ terminal-logger apt-get -y install spotify-client
 
 # Install LaTeX.
 
-terminal-logger apt-get -y install gnuplot
+terminal-logger apt-get -y install                                            \
+        gnuplot                                                               \
+        gnuplot-doc
 terminal-logger apt-get -y install texlive-full
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
