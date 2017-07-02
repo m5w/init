@@ -268,6 +268,9 @@ terminal-logger apt-get -y install "liblua${BASH_REMATCH[1]}-dev"
 
 # YouCompleteMe
 terminal-logger apt-get -y install python3-dev
+terminal-logger apt-get -y install                                            \
+        mono-complete                                                         \
+        mono-dbg
 
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p ~/.vim/after/ftplugin
@@ -396,11 +399,11 @@ cd moses-smt
 git clone                                                                     \
         'https://github.com/moses-smt/mosesdecoder.git'
 LF
-terminal-logger pip3 -q install                                               \
-        matplotlib                                                            \
-        nltk                                                                  \
-        numpy                                                                 \
-        scikit-learn
+terminal-logger apt-get -y install                                            \
+        python3-matplotlib                                                    \
+        python3-nltk                                                          \
+        python3-numpy
+terminal-logger pip3 -q install scikit-learn
 terminal-logger apt-get -y install ant
 sudo -iu "$SUDO_USER" bash << LF
 cd github.com/matxin
@@ -504,13 +507,10 @@ cd texmf/tex/latex
 unzip ~/Downloads/mla-paper.zip
 LF
 
-# Install pip packages.
-
-terminal-logger pip3 -q install pyftpdlib
-
 # Install packages.
 
 terminal-logger apt-get -y install                                            \
+        avahi-utils                                                           \
         baobab                                                                \
         bleachbit                                                             \
         bsd-mailx                                                             \
@@ -522,6 +522,7 @@ terminal-logger apt-get -y install                                            \
         gimp                                                                  \
         git-gui                                                               \
         git-svn                                                               \
+        gstreamer1.0-fluendo-mp3                                              \
         gufw                                                                  \
         idle3                                                                 \
         iotop                                                                 \
@@ -532,10 +533,13 @@ terminal-logger apt-get -y install                                            \
         lldb                                                                  \
         markdown                                                              \
         nasm                                                                  \
+        p7zip-full                                                            \
         pandoc                                                                \
         pastebinit                                                            \
         pavucontrol                                                           \
         proot                                                                 \
+        python3-lxml                                                          \
+        python3-pyftpdlib                                                     \
         qemu-user                                                             \
         screen                                                                \
         smartmontools                                                         \
