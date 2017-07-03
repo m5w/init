@@ -295,7 +295,11 @@ sudo -iu "$SUDO_USER" bash << LF
 trash-put                                                                     \
         .bashrc                                                               \
         .profile
-cd stow
+cd .config
+trash-put                                                                     \
+        konsolerc                                                             \
+        kwinrulesrc
+cd ../stow
 stow                                                                          \
         bash                                                                  \
         git                                                                   \
