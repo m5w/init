@@ -170,6 +170,25 @@ stow apt
 
 terminal-logger apt-get -y update
 
+# Install SMART Monitoring Tools.
+
+terminal-logger apt-get -y install smartmontools
+
+# Configure SMART Monitoring Tools.
+
+# to-do: mail and sSMTP
+terminal-logger apt-get -y install                                            \
+        bsd-mailx                                                             \
+        ssmtp
+
+cd /etc
+git clone                                                                     \
+        'https://github.com/m5w/etc-stow.git'                                 \
+        stow
+trash-put smartd.conf
+cd stow
+stow smartd
+
 # Configure GNU GRUB.
 
 cd /etc/default
@@ -529,7 +548,6 @@ terminal-logger apt-get -y install                                            \
         avahi-utils                                                           \
         baobab                                                                \
         bleachbit                                                             \
-        bsd-mailx                                                             \
         chkrootkit                                                            \
         chromium-browser                                                      \
         clang-tidy                                                            \
@@ -558,8 +576,6 @@ terminal-logger apt-get -y install                                            \
         python3-pyftpdlib                                                     \
         qemu-user                                                             \
         screen                                                                \
-        smartmontools                                                         \
-        ssmtp                                                                 \
         thunderbird                                                           \
         tilp2                                                                 \
         timidity                                                              \
