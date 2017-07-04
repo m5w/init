@@ -200,6 +200,18 @@ cd stow
 stow grub
 update-grub
 
+# Install NTP.
+
+terminal-logger apt-get -y install                                            \
+        ntp                                                                   \
+        ntp-doc
+
+# Set the clock.
+
+service ntp stop
+ntpd -gq
+service ntp start
+
 # Install the backup and upgrade scripts.
 
 sudo -iu "$SUDO_USER" bash << LF
