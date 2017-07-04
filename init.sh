@@ -566,6 +566,7 @@ terminal-logger apt-get -y install                                            \
         dos2unix                                                              \
         easytag                                                               \
         gimp                                                                  \
+        git-doc                                                               \
         git-gui                                                               \
         git-svn                                                               \
         gstreamer1.0-fluendo-mp3                                              \
@@ -573,9 +574,13 @@ terminal-logger apt-get -y install                                            \
         idle3                                                                 \
         iotop                                                                 \
         keepass2                                                              \
+        keepass2-doc                                                          \
         keepassx                                                              \
         libboost-all-dev                                                      \
+        libboost-dbg                                                          \
+        libboost-doc                                                          \
         lilypond                                                              \
+        lilypond-doc                                                          \
         lldb                                                                  \
         markdown                                                              \
         nasm                                                                  \
@@ -594,7 +599,8 @@ terminal-logger apt-get -y install                                            \
         usb-creator-kde                                                       \
         valgrind                                                              \
         virtualbox                                                            \
-        weechat
+        weechat                                                               \
+        weechat-doc
 
 cat << \LF
 # Installing drivers may fail.
