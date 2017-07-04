@@ -69,7 +69,7 @@ _get_home () {
 # and move to the first match of "ENVIRONMENT".
 
 (($EUID == 0)) && [[ $HOME == $(_get_home 0) ]] && [[ -n $SUDO_USER ]] || {
-echo "$0: You must invoke sudo to execute this program as the superuser on a login shell"|fold -sw 79
+echo "$0: You must invoke sudo to execute this program as the superuser on a login shell"
 exit 1
 }
 
