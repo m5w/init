@@ -170,11 +170,6 @@ stow apt
 
 terminal-logger apt-get -y update
 
-# Install WICD.
-
-terminal-logger apt-get -y install wicd
-terminal-logger apt-get -y purge --autoremove network-manager
-
 # Install SMART Monitoring Tools.
 
 terminal-logger apt-get -y install smartmontools
@@ -339,8 +334,10 @@ cd ../stow
 stow                                                                          \
         bash                                                                  \
         git                                                                   \
+        klipper                                                               \
         konsole                                                               \
-        systemsettings5
+        kwallet                                                               \
+        kwinrules
 LF
 
 # Configure Git for the superuser.
