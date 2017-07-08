@@ -266,7 +266,7 @@ terminal-logger apt-get -y install openjdk-8-doc
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
-        'http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz'
+        'https://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz'
 LF
 cd "$_sudo_home/Downloads"
 tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
