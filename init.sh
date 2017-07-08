@@ -290,6 +290,8 @@ terminal-logger apt-get -y install                                            \
         build-essential                                                       \
         cmake                                                                 \
         cmake-doc                                                             \
+        libclang-3.9-dev                                                      \
+        libclang1-3.9-dbg                                                     \
         libncurses5-dbg                                                       \
         libncurses5-dev                                                       \
         libpthread-workqueue-dev                                              \
