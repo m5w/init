@@ -328,16 +328,24 @@ trash-put                                                                     \
         .profile
 cd .config
 trash-put                                                                     \
+        kglobalshortcutsrc                                                    \
+        khotkeysrc                                                            \
         konsolerc                                                             \
-        kwinrulesrc
+        kwinrulesrc                                                           \
+        powerdevilrc                                                          \
+        powermanagementprofilesrc
 cd ../stow
 stow                                                                          \
         bash                                                                  \
         git                                                                   \
+        kglobalshortcuts                                                      \
+        khotkeys                                                              \
         klipper                                                               \
         konsole                                                               \
         kwallet                                                               \
-        kwinrules
+        kwinrules                                                             \
+        powerdevil                                                            \
+        powermanagementprofiles
 LF
 
 # Configure Git for the superuser.
