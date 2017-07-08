@@ -344,7 +344,6 @@ stow                                                                          \
         khotkeys                                                              \
         klipper                                                               \
         konsole                                                               \
-        kwallet                                                               \
         kwinrules                                                             \
         powerdevil                                                            \
         powermanagementprofiles
