@@ -172,14 +172,12 @@ terminal-logger apt-get -y update
 
 # Install SMART Monitoring Tools.
 
-terminal-logger apt-get -y install smartmontools
-
-# Configure SMART Monitoring Tools.
-
-# to-do: mail and sSMTP
 terminal-logger apt-get -y install                                            \
         bsd-mailx                                                             \
+        smartmontools                                                         \
         ssmtp
+
+# Configure SMART Monitoring Tools.
 
 cd /etc
 git clone                                                                     \
@@ -611,7 +609,8 @@ terminal-logger apt-get -y install                                            \
         valgrind                                                              \
         virtualbox                                                            \
         weechat                                                               \
-        weechat-doc
+        weechat-doc                                                           \
+        weechat-scripts
 
 cat << \LF
 # Installing drivers may fail.
