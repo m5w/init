@@ -313,8 +313,10 @@ terminal-logger apt-get -y install                                            \
 terminal-logger apt-get -y install flake8
 
 sudo -iu "$SUDO_USER" bash << LF
-mkdir -p ~/.vim/after/ftplugin
-cd stow
+mkdir -p .vim/after/ftplugin
+cd .vim/after
+mkdir -p syntax/tex
+cd ~/stow
 stow vim
 vim +qa
 LF
