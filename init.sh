@@ -309,6 +309,9 @@ terminal-logger apt-get -y install                                            \
         mono-complete                                                         \
         mono-dbg
 
+# vim-flake8
+terminal-logger apt-get -y install flake8
+
 sudo -iu "$SUDO_USER" bash << LF
 mkdir -p ~/.vim/after/ftplugin
 cd stow
@@ -534,6 +537,13 @@ LF
 cd "$_sudo_home/Downloads/binpac8x"
 install -Dt /usr/local/bin binpac8x.py
 
+# Install KeePass
+
+terminal-logger apt-get -y install                                            \
+        keepass2                                                              \
+        keepass2-doc                                                          \
+        xdotool
+
 # Install Spotify.
 
 terminal-logger apt-key adv                                                   \
@@ -551,40 +561,72 @@ terminal-logger apt-get -y install spotify-client
 
 terminal-logger apt-get -y install                                            \
         gnuplot                                                               \
-        gnuplot-doc
+        gnuplot-doc                                                           \
+        python3-pygments
 terminal-logger apt-get -y install texlive-full
+sudo -iu "$SUDO_USER" bash << LF
+tlmgr init-usertree
+tlmgr option repository                                                       \
+        'ftp://tug.org/historic/systems/texlive/2015/tlnet-final'
+tlmgr install                                                                 \
+        minted                                                                \
+        mla-paper
+LF
+
+# Install VirtualBox
+
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
-        'http://mirrors.ctan.org/macros/latex/contrib/mla-paper.zip'
-cd
-mkdir -p texmf/tex/latex
-cd texmf/tex/latex
-unzip ~/Downloads/mla-paper.zip
+        'https://www.virtualbox.org/download/oracle_vbox.asc'
+wget                                                                          \
+        'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
+LF
+cat > /etc/apt/sources.list.d/virtualbox.list << LF
+deb http://download.virtualbox.org/virtualbox/debian xenial contrib
+LF
+terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox.asc"
+terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox_2016.asc"
+terminal-logger apt-get update
+terminal-logger apt-get -y install                                            \
+        dkms                                                                  \
+        virtualbox-5.1
+
+# Install WeeChat
+
+terminal-logger apt-get -y install                                            \
+        weechat                                                               \
+        weechat-doc                                                           \
+        weechat-scripts
+sudo -iu "$SUDO_USER" bash << LF
+mkdir -p .weechat/perl/autoload
+cd .weechat/perl/autoload
+ln -s /usr/share/weechat/perl/iset.pl
 LF
 
 # Install packages.
 
 terminal-logger apt-get -y install                                            \
+        acpidump                                                              \
         avahi-utils                                                           \
         baobab                                                                \
         bleachbit                                                             \
         chkrootkit                                                            \
         chromium-browser                                                      \
         clang-tidy                                                            \
+        dconf-cli                                                             \
         dos2unix                                                              \
         easytag                                                               \
+        flashplugin-installer                                                 \
         gimp                                                                  \
         git-doc                                                               \
         git-gui                                                               \
         git-svn                                                               \
+        gnome-disk-utility                                                    \
         gstreamer1.0-fluendo-mp3                                              \
         gufw                                                                  \
         idle3                                                                 \
         iotop                                                                 \
-        keepass2                                                              \
-        keepass2-doc                                                          \
-        keepassx                                                              \
         libboost-all-dev                                                      \
         libboost-dbg                                                          \
         libboost-doc                                                          \
@@ -598,19 +640,17 @@ terminal-logger apt-get -y install                                            \
         pastebinit                                                            \
         pavucontrol                                                           \
         proot                                                                 \
+        python-visual                                                         \
         python3-lxml                                                          \
         python3-pyftpdlib                                                     \
         qemu-user                                                             \
         screen                                                                \
+        tcl-doc                                                               \
         thunderbird                                                           \
         tilp2                                                                 \
         timidity                                                              \
         usb-creator-kde                                                       \
-        valgrind                                                              \
-        virtualbox                                                            \
-        weechat                                                               \
-        weechat-doc                                                           \
-        weechat-scripts
+        valgrind
 
 cat << \LF
 # Installing drivers may fail.
