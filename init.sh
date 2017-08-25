@@ -564,8 +564,13 @@ terminal-logger apt-get -y install spotify-client
 terminal-logger apt-get -y install                                            \
         gnuplot                                                               \
         gnuplot-doc                                                           \
-        python3-pygments
-terminal-logger apt-get -y install texlive-full
+        python3-pygments                                                      \
+        texlive-full
+
+# Install TeX Live packages.
+
+terminal-logger apt-get -y install xzdec
+
 sudo -iu "$SUDO_USER" bash << LF
 tlmgr init-usertree
 tlmgr option repository                                                       \
