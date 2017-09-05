@@ -267,7 +267,7 @@ wget                                                                          \
         'https://mirrors.xmission.com/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz'
 LF
 cd "$_sudo_home/Downloads"
-tar xzf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
+tar xf eclipse-java-neon-3-linux-gtk-x86_64.tar.gz -C /opt
 
 # to-do: Eclim
 terminal-logger apt-get -y install openjdk-8-jdk
@@ -559,8 +559,10 @@ LF
 terminal-logger apt-get update
 terminal-logger apt-get -y install spotify-client
 
-# Install LaTeX.
+# Install TeX Live 2017.
 
+terminal-logger add-apt-repository -y ppa:jonathonf/texlive-2017
+terminal-logger apt-get update
 terminal-logger apt-get -y install                                            \
         gnuplot                                                               \
         gnuplot-doc                                                           \
@@ -569,12 +571,23 @@ terminal-logger apt-get -y install                                            \
 
 # Install TeX Live packages.
 
-terminal-logger apt-get -y install xzdec
+# Install XZ Utils 5.2
+
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget -O xz-5.2.2.tar.xz                                                       \
+        'https://downloads.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz?r=&ts=1504614304&use_mirror=superb-dca2'
+tar xf xz-5.2.2.tar.xz
+cd xz-5.2.2
+./configure
+make
+LF
+cd "$_sudo_home/Downloads/xz-5.2.2"
+make install
+ldconfig
 
 sudo -iu "$SUDO_USER" bash << LF
 tlmgr init-usertree
-tlmgr option repository                                                       \
-        'ftp://tug.org/historic/systems/texlive/2015/tlnet-final'
 tlmgr install                                                                 \
         minted                                                                \
         mla-paper
