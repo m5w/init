@@ -638,6 +638,7 @@ terminal-logger apt-get -y install                                            \
         dos2unix                                                              \
         easytag                                                               \
         flashplugin-installer                                                 \
+        geda                                                                  \
         gimp                                                                  \
         git-doc                                                               \
         git-gui                                                               \
