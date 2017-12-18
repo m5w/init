@@ -552,7 +552,7 @@ terminal-logger apt-key adv                                                   \
         --keyserver \
 'hkp://keyserver.ubuntu.com:80'                                               \
         --recv-keys \
-BBEBDCB318AD50EC6865090613B00F1FD2C19886
+0DF731E45CE24F27EEEB1450EFDC8610341D9410
 cat > /etc/apt/sources.list.d/spotify.list << LF
 deb http://repository.spotify.com stable non-free
 LF
@@ -560,6 +560,16 @@ terminal-logger apt-get update
 terminal-logger apt-get -y install spotify-client
 
 # Install TeX Live 2017.
+
+terminal-logger apt-get -y install perl-doc
+
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz'
+LF
+cd "$_sudo_home/Downloads"
+tar xf install-tl-unx.tar.gz
 
 terminal-logger add-apt-repository -y ppa:jonathonf/texlive-2017
 terminal-logger apt-get update
