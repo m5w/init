@@ -307,7 +307,9 @@ terminal-logger apt-get -y install                                            \
         python3-doc
 terminal-logger apt-get -y install                                            \
         mono-complete                                                         \
-        mono-dbg
+        mono-dbg                                                              \
+        mono-devel                                                            \
+        referenceassemblies-pcl
 
 # vim-flake8
 terminal-logger apt-get -y install flake8
@@ -658,6 +660,7 @@ terminal-logger apt-get -y install                                            \
         baobab                                                                \
         bleachbit                                                             \
         chkrootkit                                                            \
+        cifs-utils                                                            \
         clang-tidy                                                            \
         dconf-cli                                                             \
         dos2unix                                                              \
