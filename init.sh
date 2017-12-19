@@ -561,25 +561,32 @@ terminal-logger apt-get -y install spotify-client
 
 # Install TeX Live 2017.
 
-terminal-logger apt-get -y install perl-doc
+terminal-logger apt-get -y install                                            \
+        gnuplot                                                               \
+        gnuplot-doc                                                           \
+        perl-doc                                                              \
+        python3-pygments
 
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
         'http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz'
+mkdir install-tl-unx
+cd install-tl-unx
+tar xf ../install-tl-unx.tar.gz --strip-components=1
+ln -s ~/github.com/m5w/init/texlive.profile
 LF
-cd "$_sudo_home/Downloads"
-tar xf install-tl-unx.tar.gz
-
-terminal-logger add-apt-repository -y ppa:jonathonf/texlive-2017
-terminal-logger apt-get update
-terminal-logger apt-get -y install                                            \
-        gnuplot                                                               \
-        gnuplot-doc                                                           \
-        python3-pygments                                                      \
-        texlive-full
-
-# Install TeX Live packages.
+EDITOR=ed visudo -f /etc/sudoers.d/install-tl << LF
+a
+$SUDO_USER $(hostname) = NOPASSWD: $_sudo_home/Downloads/install-tl-unx/install-tl
+.
+wq
+LF
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads/install-tl-unx
+sudo ./install-tl --profile=texlive.profile
+LF
+rm /etc/sudoers.d/install-tl
 
 # Install XZ Utils 5.2
 
