@@ -585,8 +585,8 @@ terminal-logger apt-get -y install                                            \
 
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
-wget -O xz-5.2.2.tar.xz                                                       \
-        'https://downloads.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz?r=&ts=1504614304&use_mirror=superb-dca2'
+wget                                                                          \
+        'https://downloads.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz'
 tar xf xz-5.2.2.tar.xz
 cd xz-5.2.2
 ./configure
