@@ -672,6 +672,8 @@ terminal-logger apt-get -y install                                            \
         lldb                                                                  \
         markdown                                                              \
         nasm                                                                  \
+        ngspice                                                               \
+        ngspice-doc                                                           \
         p7zip-full                                                            \
         pandoc                                                                \
         pastebinit                                                            \
