@@ -593,7 +593,7 @@ rm /etc/sudoers.d/install-tl
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
-        'https://downloads.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz'
+        'https://superb-dca2.dl.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz'
 tar xf xz-5.2.2.tar.xz
 cd xz-5.2.2
 ./configure
