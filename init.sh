@@ -507,6 +507,17 @@ lt-comp rl matxin-eng.eng.dix eng.autogen.bin
 matxin-preprocess-generate matxin-eng.eng.gnx eng.gnx.bin
 LF
 
+# Install the Arduino IDE.
+
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'https://downloads.arduino.cc/arduino-1.8.5-linux64.tar.xz'
+tar xf arduino-1.8.5-linux64.tar.xz
+cd arduino-1.8.5
+./install.sh
+LF
+
 # Install SPASM-ng.
 
 terminal-logger apt-get -y install                                            \
@@ -539,7 +550,7 @@ LF
 cd "$_sudo_home/Downloads/binpac8x"
 install -Dt /usr/local/bin binpac8x.py
 
-# Install KeePass
+# Install KeePass.
 
 terminal-logger apt-get -y install                                            \
         keepass2                                                              \
@@ -588,8 +599,9 @@ sudo ./install-tl --profile=texlive.profile
 LF
 rm /etc/sudoers.d/install-tl
 
-# Install XZ Utils 5.2
+# Configure TeX Live 2017.
 
+# XZ Utils 5.2
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
 wget                                                                          \
@@ -605,12 +617,9 @@ ldconfig
 
 sudo -iu "$SUDO_USER" bash << LF
 tlmgr init-usertree
-tlmgr install                                                                 \
-        minted                                                                \
-        mla-paper
 LF
 
-# Install VirtualBox
+# Install VirtualBox.
 
 sudo -iu "$SUDO_USER" bash << LF
 cd Downloads
@@ -629,7 +638,7 @@ terminal-logger apt-get -y install                                            \
         dkms                                                                  \
         virtualbox-5.1
 
-# Install WeeChat
+# Install WeeChat.
 
 terminal-logger apt-get -y install                                            \
         weechat                                                               \
