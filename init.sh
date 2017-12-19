@@ -649,7 +649,6 @@ terminal-logger apt-get -y install                                            \
         baobab                                                                \
         bleachbit                                                             \
         chkrootkit                                                            \
-        chromium-browser                                                      \
         clang-tidy                                                            \
         dconf-cli                                                             \
         dos2unix                                                              \
