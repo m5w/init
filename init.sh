@@ -99,7 +99,7 @@ LF
 # Upgrade all of the installed software.
 
 #
-#     terminal-logger apt-get -qy update
+#     terminal-logger apt-get -q update
 #
 # The user should have had to have run
 #
@@ -166,9 +166,9 @@ trash-put sources.list
 cd stow
 stow apt
 
-# "-qy" is no longer necessary; only "-y" is.
+# "-q" is no longer necessary.
 
-terminal-logger apt-get -y update
+terminal-logger apt-get update
 
 # Install SMART Monitoring Tools.
 
@@ -218,8 +218,77 @@ git clone --recursive                                                         \
 LF
 cd "$_sudo_home/stow/backup"
 install -Dt /usr/local/bin backup
-cd "$_sudo_home/stow/upgrade"
+cd "../upgrade"
 install -Dt /usr/local/bin upgrade
+
+# Install VirtualBox.
+
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'https://www.virtualbox.org/download/oracle_vbox.asc'
+wget                                                                          \
+        'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
+LF
+terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox.asc"
+terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox_2016.asc"
+cd /etc/apt/sources.list.d
+cat > virtualbox.list << LF
+deb http://download.virtualbox.org/virtualbox/debian xenial contrib
+LF
+terminal-logger apt-get update
+terminal-logger apt-get -y install                                            \
+        dkms                                                                  \
+        virtualbox-5.1
+
+# Install TeX Live 2017.
+
+terminal-logger apt-get -y install                                            \
+        gnuplot                                                               \
+        gnuplot-doc                                                           \
+        perl-doc                                                              \
+        python3-pygments
+
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz'
+mkdir install-tl-unx
+cd install-tl-unx
+tar xf ../install-tl-unx.tar.gz --strip-components=1
+ln -s ~/github.com/m5w/init/texlive.profile
+LF
+EDITOR=ed visudo -f /etc/sudoers.d/install-tl << LF
+a
+$SUDO_USER $(hostname) = NOPASSWD: $_sudo_home/Downloads/install-tl-unx/install-tl
+.
+wq
+LF
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads/install-tl-unx
+sudo ./install-tl --profile=texlive.profile
+LF
+rm /etc/sudoers.d/install-tl
+
+# Configure TeX Live 2017.
+
+# XZ Utils 5.2
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'https://superb-dca2.dl.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz'
+tar xf xz-5.2.2.tar.xz
+cd xz-5.2.2
+./configure
+make
+LF
+cd "$_sudo_home/Downloads/xz-5.2.2"
+make install
+ldconfig
+
+sudo -iu "$SUDO_USER" bash << LF
+tlmgr init-usertree
+LF
 
 # Install vim.
 
@@ -317,9 +386,9 @@ terminal-logger apt-get -y install                                            \
 terminal-logger apt-get -y install flake8
 
 sudo -iu "$SUDO_USER" bash << LF
-mkdir -p .vim/after/ftplugin
+mkdir -p .vim/after
 cd .vim/after
-mkdir -p syntax/tex
+mkdir -p ftplugin syntax/tex
 cd ~/stow
 stow vim
 vim +qa
@@ -364,6 +433,13 @@ git clone --recursive                                                         \
         stow
 cd stow
 stow git
+
+# Install KeePass.
+
+terminal-logger apt-get -y install                                            \
+        keepass2                                                              \
+        keepass2-doc                                                          \
+        xdotool
 
 # Install Apertium.
 
@@ -511,17 +587,6 @@ lt-comp rl matxin-eng.eng.dix eng.autogen.bin
 matxin-preprocess-generate matxin-eng.eng.gnx eng.gnx.bin
 LF
 
-# Install the Arduino IDE.
-
-sudo -iu "$SUDO_USER" bash << LF
-cd Downloads
-wget                                                                          \
-        'https://downloads.arduino.cc/arduino-1.8.5-linux64.tar.xz'
-tar xf arduino-1.8.5-linux64.tar.xz
-cd arduino-1.8.5
-./install.sh
-LF
-
 # Install SPASM-ng.
 
 terminal-logger apt-get -y install                                            \
@@ -554,93 +619,31 @@ LF
 cd "$_sudo_home/Downloads/binpac8x"
 install -Dt /usr/local/bin binpac8x.py
 
-# Install KeePass.
+# Install the Arduino IDE.
 
-terminal-logger apt-get -y install                                            \
-        keepass2                                                              \
-        keepass2-doc                                                          \
-        xdotool
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'https://downloads.arduino.cc/arduino-1.8.5-linux64.tar.xz'
+tar xf arduino-1.8.5-linux64.tar.xz
+cd arduino-1.8.5
+./install.sh
+LF
 
-# Install Spotify.
+# Install Riot.
 
-terminal-logger apt-key adv                                                   \
-        --keyserver \
-'hkp://keyserver.ubuntu.com:80'                                               \
-        --recv-keys \
-0DF731E45CE24F27EEEB1450EFDC8610341D9410
-cat > /etc/apt/sources.list.d/spotify.list << LF
-deb http://repository.spotify.com stable non-free
+sudo -iu "$SUDO_USER" bash << LF
+cd Downloads
+wget                                                                          \
+        'https://riot.im/packages/debian/repo-key.asc'
+LF
+terminal-logger apt-key add "$_sudo_home/Downloads/repo-key.asc"
+cd /etc/apt/sources.list.d
+cat > riot.list << LF
+deb https://riot.im/packages/debian xenial main
 LF
 terminal-logger apt-get update
-terminal-logger apt-get -y install spotify-client
-
-# Install TeX Live 2017.
-
-terminal-logger apt-get -y install                                            \
-        gnuplot                                                               \
-        gnuplot-doc                                                           \
-        perl-doc                                                              \
-        python3-pygments
-
-sudo -iu "$SUDO_USER" bash << LF
-cd Downloads
-wget                                                                          \
-        'http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz'
-mkdir install-tl-unx
-cd install-tl-unx
-tar xf ../install-tl-unx.tar.gz --strip-components=1
-ln -s ~/github.com/m5w/init/texlive.profile
-LF
-EDITOR=ed visudo -f /etc/sudoers.d/install-tl << LF
-a
-$SUDO_USER $(hostname) = NOPASSWD: $_sudo_home/Downloads/install-tl-unx/install-tl
-.
-wq
-LF
-sudo -iu "$SUDO_USER" bash << LF
-cd Downloads/install-tl-unx
-sudo ./install-tl --profile=texlive.profile
-LF
-rm /etc/sudoers.d/install-tl
-
-# Configure TeX Live 2017.
-
-# XZ Utils 5.2
-sudo -iu "$SUDO_USER" bash << LF
-cd Downloads
-wget                                                                          \
-        'https://superb-dca2.dl.sourceforge.net/project/lzmautils/xz-5.2.2.tar.gz'
-tar xf xz-5.2.2.tar.xz
-cd xz-5.2.2
-./configure
-make
-LF
-cd "$_sudo_home/Downloads/xz-5.2.2"
-make install
-ldconfig
-
-sudo -iu "$SUDO_USER" bash << LF
-tlmgr init-usertree
-LF
-
-# Install VirtualBox.
-
-sudo -iu "$SUDO_USER" bash << LF
-cd Downloads
-wget                                                                          \
-        'https://www.virtualbox.org/download/oracle_vbox.asc'
-wget                                                                          \
-        'https://www.virtualbox.org/download/oracle_vbox_2016.asc'
-LF
-cat > /etc/apt/sources.list.d/virtualbox.list << LF
-deb http://download.virtualbox.org/virtualbox/debian xenial contrib
-LF
-terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox.asc"
-terminal-logger apt-key add "$_sudo_home/Downloads/oracle_vbox_2016.asc"
-terminal-logger apt-get update
-terminal-logger apt-get -y install                                            \
-        dkms                                                                  \
-        virtualbox-5.1
+terminal-logger apt-get -y install riot-web
 
 # Install WeeChat.
 
@@ -653,6 +656,20 @@ mkdir -p .weechat/perl/autoload
 cd .weechat/perl/autoload
 ln -s /usr/share/weechat/perl/iset.pl
 LF
+
+# Install Spotify.
+
+terminal-logger apt-key adv                                                   \
+        --keyserver \
+'hkp://keyserver.ubuntu.com:80'                                               \
+        --recv-keys \
+0DF731E45CE24F27EEEB1450EFDC8610341D9410
+cd /etc/apt/sources.list.d
+cat > spotify.list << LF
+deb http://repository.spotify.com stable non-free
+LF
+terminal-logger apt-get update
+terminal-logger apt-get -y install spotify-client
 
 # Install packages.
 
