@@ -306,9 +306,11 @@ terminal-logger apt-get -y install                                            \
         python3-dev                                                           \
         python3-doc
 terminal-logger apt-get -y install                                            \
+        ca-certificates-mono                                                  \
         mono-complete                                                         \
         mono-dbg                                                              \
         mono-devel                                                            \
+        mono-xsp4                                                             \
         referenceassemblies-pcl
 
 # vim-flake8
