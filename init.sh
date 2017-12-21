@@ -697,7 +697,7 @@ terminal-logger apt-get -y install                                            \
         python3-lxml                                                          \
         python3-pyftpdlib                                                     \
         qemu-user                                                             \
-        redshift                                                              \
+        redshift-gtk                                                          \
         screen                                                                \
         tcl-doc                                                               \
         thunderbird                                                           \
